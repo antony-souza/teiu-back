@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
+import { environment } from "environment/environment";
 import Redis from "ioredis";
-import { environment } from "src/environment/environment";
 
 @Injectable()
 export default class RedisClient extends Redis {

@@ -1,9 +1,7 @@
 import { Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role, Users } from "@prisma/client";
 import * as bcrypt from "bcryptjs";
-import { environment } from "src/environment/environment-prod";
-
-
+import { environment } from "./environment/environment-prod";
 
 export class PrismaInitialService
   extends PrismaClient
@@ -24,16 +22,14 @@ export class PrismaInitialService
 async function main() {
   const prismaService = new PrismaInitialService();
 
-  const userDefault:Users = {
+  const userDefault: Users = {
     name: environment.DEFAULT_USER_NAME,
     email: environment.DEFAULT_USER_EMAIL,
     role: environment.DEFAULT_USER_ROLE as Role,
     id: "1", 
     password: "",
-    image_url: environment.DEFAULT_USER_IMAGE_URL,
-    store_id: undefined,
-    created_at: undefined,
-    updated_at: undefined,
+    createdAt: undefined,
+    updatedAt: undefined,
   };
 
   const checkIfExistUser = await prismaService.users.count({
