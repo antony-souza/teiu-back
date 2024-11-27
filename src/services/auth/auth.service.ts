@@ -2,35 +2,42 @@ import { ConflictException, Injectable } from "@nestjs/common";
 import * as bcrypt from "bcryptjs";
 import { Users } from "@prisma/client";
 import { CreateAuthDto } from "./dto/create-auth.dto";
-import { PrismaService } from "src/provider/prisma/prisma-client";
 import { AuthJwtService } from "src/middleware/jwt/jwt-auth.service";
+import { AuthRepository } from "src/repositories/auth.repository";
+import { UpdateUserDto } from "../user/dto/update-user.dto";
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly prisma: PrismaService,
     private readonly AuthToken: AuthJwtService,
-  ) {}
-  async authUser(auth: CreateAuthDto) {
-    const user = await this.prisma.users.findFirst({
-      where: { email: auth.email },
-    });
+    private readonly authRepository: AuthRepository
+  ) { }
+  async authUser(dto: CreateAuthDto) {
 
-    if (!user || !(await bcrypt.compare(auth.password, user.password))) {
+    const user = await this.authRepository.authUser(dto);
+
+    if (!user) {
       throw new ConflictException("Invalid email or password");
     }
-    const token = this.AuthToken.generateToken(user);
+
+    if (!user.password || !(await bcrypt.compare(dto.password, user.password))) {
+      throw new ConflictException("Password is incorrect");
+    }
+
+    const token: string = this.AuthToken.generateToken(user);
 
     return {
       token,
       message: "User authenticated successfully!",
     };
   }
-  async validateToken(token: string): Promise<Users> {
-    const payload = this.AuthToken.verifyToken(token);
-    const user = await this.prisma.users.findUnique({
-      where: { id: payload.id },
-    });
+
+
+  async validateToken(dto: UpdateUserDto): Promise<Users> {
+    const payload = this.AuthToken.verifyToken(dto.token);
+    const id: UpdateUserDto = { id: payload.id }
+    const user = await this.authRepository.findUnique(id);
+
     return user;
   }
 }
