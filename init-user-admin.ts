@@ -26,6 +26,7 @@ async function main() {
     name: environment.DEFAULT_USER_NAME,
     email: environment.DEFAULT_USER_EMAIL,
     role: environment.DEFAULT_USER_ROLE as Role,
+    imageUrl:environment.DEFAULT_USER_IMAGE_URL,
     id: "1", 
     password: "",
     createdAt: undefined,
