@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(environment.port);
-  Logger.log(`Application running on http://localhost:${environment.port}`, 'Application');
+  Logger.debug(`Application running on http://localhost:${environment.port}`, 'Application');
 }
 
 bootstrap();

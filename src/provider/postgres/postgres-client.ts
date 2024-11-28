@@ -14,14 +14,14 @@ export class PostgresService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     await this.pool.connect();
-    
+
   }
 
   async onModuleDestroy() {
     await this.pool.end();
   }
 
-  query(query: string, params: any[]) {
-    return this.pool.query(query, params);
+  query(query: string, params?: any[]) {
+    return this.pool.query(query, params || []);
   }
 }

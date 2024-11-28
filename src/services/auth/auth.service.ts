@@ -33,9 +33,9 @@ export class AuthService {
   }
 
 
-  async validateToken(dto: UpdateUserDto): Promise<Users> {
+  async validateToken(dto: CreateAuthDto): Promise<Users> {
     const payload = this.AuthToken.verifyToken(dto.token);
-    const id: UpdateUserDto = { id: payload.id }
+    const id: Partial<CreateAuthDto> = { id: payload.id }
     const user = await this.authRepository.findUnique(id);
 
     return user;

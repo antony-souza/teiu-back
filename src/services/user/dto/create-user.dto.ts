@@ -1,8 +1,10 @@
-import { IsString } from "class-validator";
+import { Role } from "@prisma/client";
+import { IsOptional, IsString } from "class-validator";
 
 export class CreateUserDto {
     @IsString()
-    id: string;
+    @IsOptional()
+    id?: string;
 
     @IsString()
     name: string;
@@ -14,8 +16,8 @@ export class CreateUserDto {
     password: string;
 
     @IsString()
-    role: string;
+    role: Role;
 
-    @IsString()
-    token?: string;
+    @IsOptional()
+    image_url?: Express.Multer.File
 }

@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Users } from "@prisma/client";
 import { PostgresService } from "src/provider/postgres/postgres-client";
 import { CreateAuthDto } from "src/services/auth/dto/create-auth.dto";
-import { UpdateUserDto } from "src/services/user/dto/update-user.dto";
+import { UpdateAuthDto } from "src/services/auth/dto/update-auth.dto";
 
 @Injectable()
 export class AuthRepository {
@@ -16,7 +16,7 @@ export class AuthRepository {
         return query.rows[0]
     }
 
-    async findUnique(dto: UpdateUserDto): Promise<Users> {
+    async findUnique(dto: UpdateAuthDto): Promise<Users> {
         const query = await this.postgresService.query(
             'SELECT id,name,email,role FROM users WHERE id = $1',
             [dto.id]
