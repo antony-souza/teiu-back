@@ -25,7 +25,7 @@ export class UserController {
     return this.userService.getAllUsersEnableTrue();
   }
 
-  @Get('/all/enable/all')
+  @Get('/all')
   getAllUsersEnableAll() {
     return this.userService.getAllUsers();
   }
