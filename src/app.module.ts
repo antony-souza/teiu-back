@@ -13,6 +13,7 @@ import { PrismaService } from './provider/prisma/prisma-client';
     isGlobal: true,
     envFilePath: '.env',
   }),
+    JwtModule,
     AuthModule,
     UserModule
   ],
