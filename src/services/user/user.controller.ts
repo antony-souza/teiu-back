@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -20,23 +20,40 @@ export class UserController {
     });
   }
 
-  @Get('/all')
-  findAll() {
-    return this.userService.findAll();
+  @Get('/all/enable/true')
+  getAllUsersEnableTrue() {
+    return this.userService.getAllUsersEnableTrue();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get('/all/enable/all')
+  getAllUsersEnableAll() {
+    return this.userService.getAllUsers();
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Put("/update/:id")
+  @UseInterceptors(FileInterceptor("image_url"))
+  async updateUser(
+    @Param("id") id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile() image_url: Express.Multer.File,
+  ) {
+    return this.userService.update({
+      ...updateUserDto,
+      id: id,
+      image_url: image_url
+    });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Delete('/deleteup/:id')
+  deleteEnable(@Param('id') id: string) {
+
+    return this.userService.deleteEnable(id);
   }
+
+  @Delete('/delete/:id')
+  deletePermanent(@Param('id') id: string) {
+
+    return this.userService.deletePermanent(id);
+  }
+
 }

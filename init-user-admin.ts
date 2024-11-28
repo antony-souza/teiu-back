@@ -30,6 +30,7 @@ async function main() {
     id: "1", 
     password: "",
     createdAt: undefined,
+    enabled: true,
     updatedAt: undefined,
   };
 

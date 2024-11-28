@@ -1,40 +1,80 @@
 import { Injectable } from "@nestjs/common";
-import { Users } from "@prisma/client";
-import { PostgresService } from "src/provider/postgres/postgres-client";
+import { IUser } from "src/interfaces/user.interface";
 import { PrismaService } from "src/provider/prisma/prisma-client";
-import { UpdateAuthDto } from "src/services/auth/dto/update-auth.dto";
 import { CreateUserDto } from "src/services/user/dto/create-user.dto";
 import { UpdateUserDto } from "src/services/user/dto/update-user.dto";
-import GeneratePasswordService from "src/utils/generate-password.service";
 import UploadFileFactoryService from "src/utils/uploads/upload-file.service";
 
 @Injectable()
 export class UserRepository {
   constructor(
-    private readonly postgresService: PostgresService,
     private readonly prismaService: PrismaService,
-    private readonly generatePasswordService: GeneratePasswordService,
     private readonly UploadFileFactoryService: UploadFileFactoryService,
   ) { }
 
   async checkUserByEmail(email: string): Promise<number> {
-    const query = await this.postgresService.query(
-      'SELECT * FROM users WHERE email = $1',
-      [email]
-    )
-    return query.rowCount
+    const query = await this.prismaService.users.count({
+      where: {
+        email: email
+      }
+    })
+
+    return query
   }
 
-  async getAllUsers(): Promise<Users[]> {
-    const query = await this.postgresService.query(
-      'SELECT id,name,email,image_url,role FROM users'
-    )
-    return query.rows
+  async checkUserByIdCount(id: string): Promise<number> {
+    const query = await this.prismaService.users.count({
+      where: {
+        id: id
+      }
+    })
+
+    return query
   }
 
-  async create(dto: CreateUserDto) {
-    let url = dto.image_url
-      ? await this.UploadFileFactoryService.upload(dto.image_url) : '';
+  async checkUserById(id: string): Promise<IUser> {
+    const query = await this.prismaService.users.findUnique({
+      where: {
+        id: id
+      }
+    })
+
+    return query
+  }
+
+  async getAllUsersEnableTrue(): Promise<IUser[]> {
+    return await this.prismaService.users.findMany({
+      where: {
+        enabled: true
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image_url: true,
+        role: true
+      }
+    })
+  }
+
+  async getAllUsers(): Promise<IUser[]> {
+    return await this.prismaService.users.findMany({
+      select: {
+        id: true,
+        enabled: true,
+        name: true,
+        email: true,
+        image_url: true,
+        role: true
+      }
+    })
+  }
+
+  async create(dto: CreateUserDto): Promise<IUser> {
+    let url = ''
+    if (dto.image_url) {
+      url = await this.UploadFileFactoryService.upload(dto.image_url)
+    }
     const query = await this.prismaService.users.create({
       data: {
         name: dto.name,
@@ -53,4 +93,52 @@ export class UserRepository {
     })
     return query
   }
+
+  async update(dto: UpdateUserDto): Promise<IUser> {
+    const existingUser = await this.checkUserById(dto.id);
+
+    let url = existingUser.image_url
+    if (dto.image_url) {
+      url = await this.UploadFileFactoryService.upload(dto.image_url)
+    }
+    return await this.prismaService.users.update({
+      where: {
+        id: dto.id
+      },
+      data: {
+        name: dto.name,
+        email: dto.email,
+        role: dto.role,
+        image_url: url,
+        password: dto.password
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image_url: true,
+        role: true
+      }
+    })
+  }
+
+  async deleteEnable(id: string): Promise<IUser> {
+    return await this.prismaService.users.update({
+      where: {
+        id: id
+      },
+      data: {
+        enabled: false
+      }
+    })
+  }
+
+  async deletePermanent(id: string): Promise<IUser> {
+    return await this.prismaService.users.delete({
+      where: {
+        id: id
+      }
+    })
+  }
+
 }

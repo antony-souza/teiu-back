@@ -6,6 +6,7 @@ import { PostgresService } from './provider/postgres/postgres-client';
 import { AuthModule } from './services/auth/auth.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UserModule } from './services/user/user.module';
+import { PrismaService } from './provider/prisma/prisma-client';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -16,6 +17,6 @@ import { UserModule } from './services/user/user.module';
     UserModule
   ],
   controllers: [AppController],
-  providers: [AppService, PostgresService, JwtService],
+  providers: [AppService, JwtService, PrismaService],
 })
 export class AppModule { }
