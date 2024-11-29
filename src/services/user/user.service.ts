@@ -112,6 +112,5 @@ export class UserService {
     response.message = 'User deleted successfully'
 
     return response
-
   }
 }

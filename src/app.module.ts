@@ -7,6 +7,8 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UserModule } from './services/user/user.module';
 import { PrismaService } from './provider/prisma/prisma-client';
 import { SocketGateway } from './gateway/socket.gateway';
+import { ChartsModule } from './services/charts/charts.module';
+import { ChartsService } from './services/charts/charts.service';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -15,9 +17,10 @@ import { SocketGateway } from './gateway/socket.gateway';
   }),
     JwtModule,
     AuthModule,
-    UserModule
+    UserModule,
+    ChartsModule
   ],
   controllers: [AppController],
-  providers: [AppService, JwtService, PrismaService, SocketGateway],
+  providers: [AppService, JwtService, PrismaService, SocketGateway,ChartsService],
 })
 export class AppModule { }
