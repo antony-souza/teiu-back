@@ -1,21 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateChartDto } from './dto/create-chart.dto';
 import { UpdateChartDto } from './dto/update-chart.dto';
+import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'src/provider/prisma/prisma-client';
+import { SocketGateway } from 'src/gateway/socket.gateway';
 
 @Injectable()
 export class ChartsService {
-  create(createChartDto: CreateChartDto) {
-    return 'This action adds a new chart';
+  constructor(private readonly prisma: PrismaService,
+    private readonly gatewayService: SocketGateway
+  ) { }
+
+  async create(createChartDto: CreateChartDto) {
+    await this.prisma.charts.create({
+      data: {
+        ...createChartDto
+      },
+      select: {
+        labels: true,
+        data: true
+      }
+    })
+    await this.findAll();
   }
 
-  findAll() {
-    const chartData = [{
-      labels: ['São Paulo', 'Rio de Janeiro', 'Minas Gerais', 'Bahia', 'Paraná', 'Rio Grande do Sul', 'Pernambuco'],
-      data: [100, 200, 300, 400, 500, 600, 700]
-    }]
-
-    return chartData;
+  async findAll() {
+    await this.sendUpdateSockets();
   }
+
+  async sendUpdateSockets() {
+    const charts = await this.prisma.charts.findMany({
+      select: {
+        labels: true,
+        data: true,
+      },
+    });
+
+    this.gatewayService.sendUpdateToClients(charts);
+  }
+
 
   findOne(id: number) {
     return `This action returns a #${id} chart`;

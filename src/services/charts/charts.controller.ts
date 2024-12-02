@@ -3,18 +3,18 @@ import { ChartsService } from './charts.service';
 import { CreateChartDto } from './dto/create-chart.dto';
 import { UpdateChartDto } from './dto/update-chart.dto';
 
-@Controller('')
+@Controller('/charts')
 export class ChartsController {
   constructor(private readonly chartsService: ChartsService) { }
 
-  @Post()
+  @Post('/create')
   create(@Body() createChartDto: CreateChartDto) {
     return this.chartsService.create(createChartDto);
   }
 
-  @Get('/charts')
+  @Get('/all')
   findAll() {
-    return this.chartsService.findAll();
+    return this.chartsService.sendUpdateSockets();
   }
 
   @Get(':id')

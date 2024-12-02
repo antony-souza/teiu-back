@@ -3,35 +3,32 @@ import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessa
 import { Server, Socket } from 'socket.io';
 import { ChartsService } from 'src/services/charts/charts.service';
 
-interface IChartData {
-  labels: string[];
-  data: number[];
-}
-
 @WebSocketGateway({ cors: true })
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
 
-  constructor(private readonly chartService: ChartsService) { }
-
+  constructor() { }
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('GatewaySocket');
 
-  @SubscribeMessage('connectToSocket')
-  handleMessage(client: Socket, payload: any): void {
-    this.logger.debug('connectToSocket', payload, client.id);
-
-    this.server.emit('chartData', this.chartService.findAll());
-  }
-
   afterInit(server: Server) {
-    this.logger.debug('Init - Socket Server');
-  }
+    this.logger.log('Init');
+  };
 
   handleConnection(client: Socket, ...args: any[]) {
-    this.logger.debug(`Client connected: ${client.id}`);
+    this.logger.log('Client connected:', client.id)
+  }
+  handleDisconnect(client: Socket) {
+    this.logger.log('Client disconnected:', client.id)
   }
 
-  handleDisconnect(client: Socket) {
-    this.logger.debug(`Client disconnected: ${client.id}`);
+  @SubscribeMessage('message')
+  handleMessage(client: Socket, payload: any): void {
+    this.server.emit('message', payload);
   }
+
+  async sendUpdateToClients(data: any) {
+    await this.server.emit('update', data)
+    console.log(data);
+  }
+
 }

@@ -18,9 +18,9 @@ import { ChartsService } from './services/charts/charts.service';
     JwtModule,
     AuthModule,
     UserModule,
-    ChartsModule
+    ChartsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JwtService, PrismaService, SocketGateway,ChartsService],
+  providers: [AppService, JwtService, PrismaService, ChartsService, SocketGateway],
 })
 export class AppModule { }
