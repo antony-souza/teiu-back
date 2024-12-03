@@ -11,32 +11,27 @@ export class ChartsService {
     private readonly gatewayService: SocketGateway
   ) { }
 
-  async create(createChartDto: CreateChartDto) {
-    await this.prisma.charts.create({
-      data: {
-        ...createChartDto
-      },
-      select: {
-        labels: true,
-        data: true
-      }
+  async create(createChartDto: CreateChartDto[]) {
+    const chart = this.prisma.charts.createMany({
+      data: createChartDto
     })
-    await this.findAll();
+
+    this.gatewayService.sendUpdateToClients(chart)
+    return chart;
   }
 
   async findAll() {
-    await this.sendUpdateSockets();
-  }
-
-  async sendUpdateSockets() {
-    const charts = await this.prisma.charts.findMany({
+    const chart = await this.prisma.charts.findMany({
       select: {
-        labels: true,
-        data: true,
-      },
-    });
+        id: true,
+        label: true,
+        data: true
+      }
+    })
 
-    this.gatewayService.sendUpdateToClients(charts);
+    this.gatewayService.sendUpdateToClients(chart)
+
+    return chart;
   }
 
 
@@ -44,9 +39,22 @@ export class ChartsService {
     return `This action returns a #${id} chart`;
   }
 
-  update(id: number, updateChartDto: UpdateChartDto) {
-    return `This action updates a #${id} chart`;
+  async update(id: string, updateChartDto: UpdateChartDto) {
+    const chart = await this.prisma.charts.update({
+      where: { id },
+      data: {
+        ...updateChartDto,
+        updatedAt: new Date()
+      }
+
+    })
+
+    const find = this.findAll()
+    this.gatewayService.sendUpdateToClients(find)
+    return chart;
   }
+
+  
 
   remove(id: number) {
     return `This action removes a #${id} chart`;

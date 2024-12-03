@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { ChartsService } from './charts.service';
 import { CreateChartDto } from './dto/create-chart.dto';
 import { UpdateChartDto } from './dto/update-chart.dto';
@@ -8,13 +8,13 @@ export class ChartsController {
   constructor(private readonly chartsService: ChartsService) { }
 
   @Post('/create')
-  create(@Body() createChartDto: CreateChartDto) {
+  create(@Body() createChartDto: CreateChartDto[]) {
     return this.chartsService.create(createChartDto);
   }
 
   @Get('/all')
   findAll() {
-    return this.chartsService.sendUpdateSockets();
+    return this.chartsService.findAll();
   }
 
   @Get(':id')
@@ -22,9 +22,10 @@ export class ChartsController {
     return this.chartsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put('/update/:id')
   update(@Param('id') id: string, @Body() updateChartDto: UpdateChartDto) {
-    return this.chartsService.update(+id, updateChartDto);
+
+    return this.chartsService.update(id,updateChartDto);
   }
 
   @Delete(':id')

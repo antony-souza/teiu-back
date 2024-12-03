@@ -1,4 +1,5 @@
 export class CreateChartDto {
-    labels: string[];
-    data: number[];
+    id?:string
+    label: string;
+    data: number;
 }

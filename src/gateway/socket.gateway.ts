@@ -27,6 +27,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect, 
   }
 
   async sendUpdateToClients(data: any) {
+    
     await this.server.emit('update', data)
     console.log(data);
   }

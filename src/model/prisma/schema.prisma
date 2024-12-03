@@ -23,8 +23,8 @@ model Users {
 
 model Charts {
   id        String   @id @default(uuid())
-  labels    String[]
-  data      Float[]
+  label     String
+  data      Float
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
