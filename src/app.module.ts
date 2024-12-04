@@ -9,6 +9,7 @@ import { PrismaService } from './provider/prisma/prisma-client';
 import { SocketGateway } from './gateway/socket.gateway';
 import { ChartsModule } from './services/charts/charts.module';
 import { ChartsService } from './services/charts/charts.service';
+import { ProductsModule } from './services/products/products.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -19,6 +20,7 @@ import { ChartsService } from './services/charts/charts.service';
     AuthModule,
     UserModule,
     ChartsModule,
+    ProductsModule
   ],
   controllers: [AppController],
   providers: [AppService, JwtService, PrismaService, ChartsService, SocketGateway],

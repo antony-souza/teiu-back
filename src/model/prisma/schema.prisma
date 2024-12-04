@@ -8,59 +8,60 @@ datasource db {
 }
 
 model Users {
-  id               String             @id @default(uuid())
-  email            String             @unique
-  name             String
-  password         String
-  enabled          Boolean            @default(true)
-  image_url        String             @default("")
-  role             Role               @default(USER)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now())
-  StoreAndProducts StoreAndProducts[]
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String
+  enabled   Boolean  @default(true)
+  image_url String   @default("")
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Store     Store[]
 
   @@map("users")
 }
 
 model Store {
-  id               String             @id @default(uuid())
-  name             String
-  image_url        String             @default("")
-  enabled          Boolean            @default(true)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now())
-  StoreAndProducts StoreAndProducts[]
+  id        String     @id @default(uuid())
+  name      String
+  image_url String     @default("")
+  enabled   Boolean    @default(true)
+  user_id   String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  User      Users      @relation(fields: [user_id], references: [id])
+  Products  Products[]
 
   @@map("stores")
 }
 
 model Products {
-  id               String             @id @default(uuid())
-  name             String
-  price            Float
-  enabled          Boolean            @default(true)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now())
-  StoreAndProducts StoreAndProducts[]
+  id          String     @id @default(uuid())
+  name        String
+  price       Float
+  description String
+  quantity    Float
+  image_url   String     @default("")
+  enabled     Boolean    @default(true)
+  store_id    String
+  category_id String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
+  Store       Store      @relation(fields: [store_id], references: [id])
+  Category    Categories @relation(fields: [category_id], references: [id])
 
   @@map("products")
 }
 
-model StoreAndProducts {
-  id         String   @id @default(uuid())
-  user_id    String
-  store_id   String
+model Categories {
+  id         String     @id @default(uuid())
+  name       String
+  image_url  String     @default("")
   product_id String
-  Users      Users    @relation(fields: [user_id], references: [id])
-  Store      Store    @relation(fields: [store_id], references: [id])
-  Product    Products @relation(fields: [product_id], references: [id])
-  quantity   Int
-  total      Float
-  enabled    Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
-
-  @@map("store_and_products")
+  Product    Products[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now())
 }
 
 model Charts {
