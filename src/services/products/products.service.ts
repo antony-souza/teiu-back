@@ -3,33 +3,31 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductRepository } from 'src/repositories/product.repository';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
-import { IProductCreated } from 'src/interfaces/product.interface';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private productRepository: ProductRepository,
-    private readonly UploadFileFactoryService: UploadFileFactoryService
+    private readonly UploadFileFactoryService: UploadFileFactoryService,
+  ) {}
 
+  async createProduct(dto: CreateProductDto) {
+    const existingProduct = await this.productRepository.checkProductByIdCount(
+      dto.name,
+    );
 
-  ) { }
-
-  async create(dto: CreateProductDto): Promise<IProductCreated> {
-    const existingProduct = this.productRepository.checkProductByIdCount(dto.id)
-
-    if (existingProduct) {
-      throw new ConflictException('Product already exist!')
+    if (existingProduct > 0) {
+      throw new ConflictException('Product already exist!');
     }
 
-    let url = ''
+    let url = '';
     if (dto.image_url) {
-      url = await this.UploadFileFactoryService.upload(dto.image_url)
+      url = await this.UploadFileFactoryService.upload(dto.image_url);
     }
 
-    dto.image_url_string = url
+    dto.image_url_string = await url;
 
-    return this.productRepository.createProduct(dto)
-
+    return this.productRepository.createProduct(dto);
   }
 
   findAll() {

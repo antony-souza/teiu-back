@@ -23,15 +23,16 @@ model Users {
 }
 
 model Store {
-  id        String     @id @default(uuid())
-  name      String
-  image_url String     @default("")
-  enabled   Boolean    @default(true)
-  user_id   String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now())
-  User      Users      @relation(fields: [user_id], references: [id])
-  Products  Products[]
+  id         String       @id @default(uuid())
+  name       String
+  image_url  String       @default("")
+  enabled    Boolean      @default(true)
+  user_id    String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+  User       Users        @relation(fields: [user_id], references: [id])
+  Products   Products[]
+  Categories Categories[]
 
   @@map("stores")
 }
@@ -41,7 +42,7 @@ model Products {
   name        String
   price       Float
   description String
-  quantity    Float
+  quantity    Int
   image_url   String     @default("")
   enabled     Boolean    @default(true)
   store_id    String
@@ -58,10 +59,14 @@ model Categories {
   id         String     @id @default(uuid())
   name       String
   image_url  String     @default("")
-  product_id String
-  Product    Products[]
+  product_id String?
+  store_id   String
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @default(now())
+  Product    Products[]
+  Store      Store      @relation(fields: [store_id], references: [id])
+
+  @@map("categories")
 }
 
 model Charts {

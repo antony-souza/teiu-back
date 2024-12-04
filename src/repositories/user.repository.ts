@@ -9,7 +9,6 @@ import UploadFileFactoryService from "src/utils/uploads/upload-file.service";
 export class UserRepository {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly UploadFileFactoryService: UploadFileFactoryService,
   ) { }
 
   async checkUserByEmail(email: string): Promise<number> {
@@ -71,16 +70,12 @@ export class UserRepository {
   }
 
   async create(dto: CreateUserDto): Promise<IUser> {
-    let url = ''
-    if (dto.image_url) {
-      url = await this.UploadFileFactoryService.upload(dto.image_url)
-    }
     const query = await this.prismaService.users.create({
       data: {
         name: dto.name,
         email: dto.email,
         role: dto.role,
-        image_url: url,
+        image_url: dto.image_url_string,
         password: dto.password
       },
       select: {
@@ -96,11 +91,6 @@ export class UserRepository {
 
   async update(dto: UpdateUserDto): Promise<IUser> {
     const existingUser = await this.checkUserById(dto.id);
-
-    let url = existingUser.image_url
-    if (dto.image_url) {
-      url = await this.UploadFileFactoryService.upload(dto.image_url)
-    }
     return await this.prismaService.users.update({
       where: {
         id: dto.id
@@ -109,7 +99,7 @@ export class UserRepository {
         name: dto.name,
         email: dto.email,
         role: dto.role,
-        image_url: url,
+        image_url: dto.image_url_string,
         password: dto.password
       },
       select: {

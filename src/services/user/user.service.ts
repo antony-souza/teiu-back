@@ -4,6 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from 'src/repositories/user.repository';
 import GeneratePasswordService from 'src/utils/generate-password.service';
 import { IUser } from 'src/interfaces/user.interface';
+import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
+import { dot } from 'node:test/reporters';
 
 @Injectable()
 export class UserService {
@@ -11,6 +13,7 @@ export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly generatePasswordService: GeneratePasswordService,
+    private readonly uploadFileFactoryService: UploadFileFactoryService
   ) { }
 
   async create(dto: CreateUserDto) {
@@ -26,6 +29,13 @@ export class UserService {
     const hashPassword = await this.generatePasswordService.createHash(
       dto.password,
     );
+
+    let url = ''
+    if (dto.image_url) {
+      url = await this.uploadFileFactoryService.upload(dto.image_url)
+    }
+
+    dto.image_url_string = await url
 
     const response = await this.userRepository.create({
       ...dto,
@@ -72,6 +82,14 @@ export class UserService {
         updateUserDto.password,
       );
     }
+
+    let url = ''
+
+    if (url) {
+      url = await this.uploadFileFactoryService.upload(updateUserDto.image_url)
+    }
+
+    updateUserDto.image_url_string = await url
 
     const response = await this.userRepository.update({
       ...updateUserDto,

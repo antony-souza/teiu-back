@@ -1,28 +1,35 @@
-import { IsNumber, IsString } from "class-validator";
+import { Transform } from 'class-transformer';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDto {
-    @IsString()
-    id: string
+  @IsString()
+  @IsOptional()
+  id?: string;
 
-    @IsString()
-    name: string;
+  @IsString()
+  name: string;
 
-    @IsNumber()
-    price: number;
+  @Transform(({ value }) =>
+    parseFloat(value.replace(/\./g, '').replace(',', '.')),
+  )
+  @IsNumber()
+  price: number;
 
-    @IsString()
-    description: string;
+  @IsString()
+  description: string;
 
-    @IsNumber()
-    quantity: number;
+  @Transform(({ value }) => parseInt(value))
+  @IsNumber()
+  quantity: number;
 
-    @IsString()
-    store_id: string;
+  @IsString()
+  store_id: string;
 
-    @IsString()
-    category_id: string;
+  @IsString()
+  @IsOptional()
+  category_id?: string;
 
-    image_url_string: string;
+  image_url_string?: string;
 
-    image_url?: Express.Multer.File;
+  image_url?: Express.Multer.File;
 }

@@ -5,6 +5,4 @@ export interface IProductCreated {
     price: number
     quantity: number
     store_id: string
-    createdAt: Date
-    updatedAt: Date
 }

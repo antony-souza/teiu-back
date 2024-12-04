@@ -1,15 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('products')
+@Controller('/products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
-  @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  @Post('/create')
+  @UseInterceptors(FileInterceptor("image_url"))
+  createProduct(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFile() image_url: Express.Multer.File,
+  ) {
+    return this.productsService.createProduct({
+      ...createProductDto,
+      image_url: image_url
+    });
   }
 
   @Get()
