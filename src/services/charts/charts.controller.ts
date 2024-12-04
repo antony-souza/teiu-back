@@ -25,7 +25,7 @@ export class ChartsController {
   @Put('/update/:id')
   update(@Param('id') id: string, @Body() updateChartDto: UpdateChartDto) {
 
-    return this.chartsService.update(id,updateChartDto);
+    return this.chartsService.update(id, updateChartDto);
   }
 
   @Delete(':id')
