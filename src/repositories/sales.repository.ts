@@ -21,7 +21,7 @@ export class SalesRepository {
   async checkStock(product_id: string) {
     return await this.prismaService.products.findUnique({
       where: { id: product_id },
-      select: { quantity: true },
+      select: { id: true, quantity: true, price: true },
     });
   }
 

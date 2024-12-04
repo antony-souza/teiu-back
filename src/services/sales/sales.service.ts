@@ -21,7 +21,10 @@ export class SalesService {
 
     await this.salesRepository.updateStock(dto.product_id, dto.quantity_sold);
 
-    return await this.salesRepository.createSale(dto);
+    return await this.salesRepository.createSale({
+      ...dto,
+      total_billed: checkQuantityProduct.price * dto.quantity_sold,
+    });
   }
 
   findAll() {
