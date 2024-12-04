@@ -10,7 +10,8 @@ export class CreateSaleDto {
     parseFloat(value.replace(/\./g, '').replace(',', '.')),
   )
   @IsNumber()
-  total_billed: number;
+  @IsOptional()
+  total_billed?: number;
 
   @Transform(({ value }) => parseInt(value))
   @IsNumber()

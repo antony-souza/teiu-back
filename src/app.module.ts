@@ -12,20 +12,29 @@ import { ChartsService } from './services/charts/charts.service';
 import { ProductsModule } from './services/products/products.module';
 import { StoreModule } from './services/store/store.module';
 import { CategoriesModule } from './services/categories/categories.module';
+import { SalesModule } from './services/sales/sales.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal: true,
-  }),
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     JwtModule,
     AuthModule,
     UserModule,
     ChartsModule,
     ProductsModule,
     StoreModule,
-    CategoriesModule
+    CategoriesModule,
+    SalesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JwtService, PrismaService, ChartsService, SocketGateway],
+  providers: [
+    AppService,
+    JwtService,
+    PrismaService,
+    ChartsService,
+    SocketGateway,
+  ],
 })
-export class AppModule { }
+export class AppModule {}

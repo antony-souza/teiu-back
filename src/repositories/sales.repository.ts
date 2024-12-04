@@ -6,6 +6,15 @@ import { CreateSaleDto } from 'src/services/sales/dto/create-sale.dto';
 export class SalesRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async findSaleByProductAndStore(product_id: string, store_id: string) {
+    return await this.prismaService.sales.findFirst({
+      where: {
+        product_id: product_id,
+        store_id: store_id,
+      },
+    });
+  }
+
   async createSale(dto: CreateSaleDto) {
     return await this.prismaService.sales.create({
       data: {
@@ -25,12 +34,26 @@ export class SalesRepository {
     });
   }
 
-  async updateStock(product_id: string, quantity: number) {
+  async updateSales(id: string, quantity_sold: number, total_billed: number) {
+    return await this.prismaService.sales.update({
+      where: { id: id },
+      data: {
+        quantity_sold: {
+          increment: quantity_sold,
+        },
+        total_billed: {
+          increment: total_billed,
+        },
+      },
+    });
+  }
+
+  async updateStock(product_id: string, quantity_sold: number) {
     return await this.prismaService.products.update({
       where: { id: product_id },
       data: {
         quantity: {
-          decrement: quantity,
+          decrement: quantity_sold,
         },
       },
     });
