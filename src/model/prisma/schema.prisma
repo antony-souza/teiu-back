@@ -18,6 +18,7 @@ model Users {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   Store     Store[]
+  Sales     Sales[]
 
   @@map("users")
 }
@@ -33,6 +34,7 @@ model Store {
   User       Users        @relation(fields: [user_id], references: [id])
   Products   Products[]
   Categories Categories[]
+  Sales      Sales[]
 
   @@map("stores")
 }
@@ -51,6 +53,7 @@ model Products {
   updatedAt   DateTime   @default(now())
   Store       Store      @relation(fields: [store_id], references: [id])
   Category    Categories @relation(fields: [category_id], references: [id])
+  Sales       Sales[]
 
   @@map("products")
 }
@@ -59,7 +62,6 @@ model Categories {
   id         String     @id @default(uuid())
   name       String
   image_url  String     @default("")
-  product_id String?
   store_id   String
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @default(now())
@@ -67,6 +69,21 @@ model Categories {
   Store      Store      @relation(fields: [store_id], references: [id])
 
   @@map("categories")
+}
+
+model Sales {
+  id         String   @id @default(uuid())
+  total      Float
+  user_id    String
+  product_id String
+  store_id   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+  User       Users    @relation(fields: [user_id], references: [id])
+  Products   Products @relation(fields: [product_id], references: [id])
+  Store      Store    @relation(fields: [store_id], references: [id])
+
+  @@map("sales")
 }
 
 model Charts {
