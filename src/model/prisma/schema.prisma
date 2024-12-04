@@ -59,29 +59,30 @@ model Products {
 }
 
 model Categories {
-  id         String     @id @default(uuid())
-  name       String
-  image_url  String     @default("")
-  store_id   String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @default(now())
-  Product    Products[]
-  Store      Store      @relation(fields: [store_id], references: [id])
+  id        String     @id @default(uuid())
+  name      String
+  image_url String     @default("")
+  store_id  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  Product   Products[]
+  Store     Store      @relation(fields: [store_id], references: [id])
 
   @@map("categories")
 }
 
 model Sales {
-  id         String   @id @default(uuid())
-  total      Float
-  user_id    String
-  product_id String
-  store_id   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
-  User       Users    @relation(fields: [user_id], references: [id])
-  Products   Products @relation(fields: [product_id], references: [id])
-  Store      Store    @relation(fields: [store_id], references: [id])
+  id            String   @id @default(uuid())
+  total_billed  Float
+  quantity_sold Int
+  product_id    String
+  user_id       String
+  store_id      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+  User          Users    @relation(fields: [user_id], references: [id])
+  Products      Products @relation(fields: [product_id], references: [id])
+  Store         Store    @relation(fields: [store_id], references: [id])
 
   @@map("sales")
 }
