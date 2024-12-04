@@ -38,6 +38,7 @@ export class SalesRepository {
     return await this.prismaService.sales.update({
       where: { id: id },
       data: {
+        updatedAt: new Date(),
         quantity_sold: {
           increment: quantity_sold,
         },
@@ -52,6 +53,7 @@ export class SalesRepository {
     return await this.prismaService.products.update({
       where: { id: product_id },
       data: {
+        updatedAt: new Date(),
         quantity: {
           decrement: quantity_sold,
         },
