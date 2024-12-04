@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { SalesRepository } from 'src/repositories/sales.repository';
+import { UpdateSaleDto } from './dto/update-sale.dto';
 
 @Injectable()
 export class SalesService {
@@ -42,7 +43,19 @@ export class SalesService {
     });
   }
 
-  findAll() {
-    return `This action returns all sales`;
+  async findAllSalesByStore(dto: UpdateSaleDto) {
+    const response = await this.salesRepository.findAllSales(dto.store_id);
+
+    if (!response || response.length === 0) {
+      throw new NotFoundException('Sales not found');
+    }
+
+    const label = response.map((sale) => sale.Products.name);
+    const data = response.map((sale) => sale.total_billed);
+
+    return {
+      label: label,
+      data: data,
+    };
   }
 }

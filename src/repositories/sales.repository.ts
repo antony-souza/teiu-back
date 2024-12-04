@@ -60,4 +60,20 @@ export class SalesRepository {
       },
     });
   }
+
+  async findAllSales(store_id: string): Promise<any[]> {
+    return await this.prismaService.sales.findMany({
+      where: {
+        store_id: store_id,
+      },
+      select: {
+        total_billed: true,
+        Products: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  }
 }
