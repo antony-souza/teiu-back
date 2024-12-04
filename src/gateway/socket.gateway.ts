@@ -1,7 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ChartsService } from 'src/services/charts/charts.service';
 
 @WebSocketGateway({ cors: true })
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
@@ -27,9 +26,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect, 
   }
 
   async sendUpdateToClients(data: any) {
-    
+
     await this.server.emit('update', data)
-    console.log(data);
   }
 
 }
