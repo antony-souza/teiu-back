@@ -34,8 +34,8 @@ export class ProductsService {
     return `This action returns all products`;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  update(updateProductDto: UpdateProductDto) {
+    return `This action updates a #product`;
   }
 
   remove(id: number) {
