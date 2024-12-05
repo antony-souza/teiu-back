@@ -63,6 +63,7 @@ model Categories {
   name      String
   image_url String     @default("")
   store_id  String
+  enabled   Boolean    @default(true)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @default(now())
   Product   Products[]

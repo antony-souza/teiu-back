@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseInterceptors,
   UploadedFile,
+  Put,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -30,26 +30,28 @@ export class CategoriesController {
     });
   }
 
-  @Get()
+  @Get('/all')
   findAll() {
     return this.categoriesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
-  }
-
-  @Patch(':id')
+  @Put('/update/:id')
+  @UseInterceptors(FileInterceptor('image_url'))
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
+    @UploadedFile() image_url: Express.Multer.File,
   ) {
-    return this.categoriesService.update(+id, updateCategoryDto);
+    const dto: UpdateCategoryDto = {
+      ...updateCategoryDto,
+      id: id,
+      image_url: image_url,
+    };
+    return this.categoriesService.update(dto);
   }
 
-  @Delete(':id')
+  @Delete('/delete/:id')
   remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+    return this.categoriesService.remove(id);
   }
 }

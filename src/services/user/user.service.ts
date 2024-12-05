@@ -89,7 +89,7 @@ export class UserService {
       );
     }
 
-    let url = '';
+    let url = existingUser.image_url;
 
     if (url) {
       url = await this.uploadFileFactoryService.upload(updateUserDto.image_url);

@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFile,
+  Put,
+} from '@nestjs/common';
 import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
@@ -6,21 +16,21 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('/store')
 export class StoreController {
-  constructor(private readonly storeService: StoreService) { }
+  constructor(private readonly storeService: StoreService) {}
 
   @Post('/create')
-  @UseInterceptors(FileInterceptor("image_url"))
+  @UseInterceptors(FileInterceptor('image_url'))
   create(
     @Body() createStoreDto: CreateStoreDto,
     @UploadedFile() image_url: Express.Multer.File,
   ) {
     return this.storeService.create({
       ...createStoreDto,
-      image_url: image_url
+      image_url: image_url,
     });
   }
 
-  @Get()
+  @Get('/all')
   findAll() {
     return this.storeService.findAll();
   }
@@ -30,13 +40,26 @@ export class StoreController {
     return this.storeService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStoreDto: UpdateStoreDto) {
-    return this.storeService.update(+id, updateStoreDto);
+  @Put('/update/:id')
+  @UseInterceptors(FileInterceptor('image_url'))
+  update(
+    @Param('id') id: string,
+    @Body()
+    updateStoreDto: UpdateStoreDto,
+    @UploadedFile() image_url: Express.Multer.File,
+  ) {
+    const dto: UpdateStoreDto = {
+      ...updateStoreDto,
+      id: id,
+    };
+    return this.storeService.update({
+      ...dto,
+      image_url: image_url,
+    });
   }
 
-  @Delete(':id')
+  @Delete('/delete/:id')
   remove(@Param('id') id: string) {
-    return this.storeService.remove(+id);
+    return this.storeService.remove(id);
   }
 }
