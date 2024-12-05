@@ -27,10 +27,15 @@ export class AuthService {
 
     const token: string = this.AuthToken.generateToken(user);
 
-    return {
-      token,
-      message: 'User authenticated successfully!',
+    const response = {
+      token: token,
+      user: {
+        name: user.name,
+        image_url: user.image_url,
+      },
     };
+
+    return response;
   }
 
   async validateToken(dto: CreateAuthDto): Promise<Users> {

@@ -11,8 +11,6 @@ export class AuthJwtService {
     const payload = {
       id: user.id,
       name: user.name,
-      role: user.role,
-      store_id: user.store_id,
     };
     return this.jwtService.sign(payload, { secret: environment.secreatKey });
   }
