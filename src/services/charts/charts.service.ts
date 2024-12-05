@@ -1,22 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateChartDto } from './dto/create-chart.dto';
 import { UpdateChartDto } from './dto/update-chart.dto';
-import { PrismaClient } from '@prisma/client';
 import { PrismaService } from 'src/provider/prisma/prisma-client';
 import { SocketGateway } from 'src/gateway/socket.gateway';
 
 @Injectable()
 export class ChartsService {
-  constructor(private readonly prisma: PrismaService,
-    private readonly gatewayService: SocketGateway
-  ) { }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly gatewayService: SocketGateway,
+  ) {}
 
   async create(createChartDto: CreateChartDto[]) {
     const chart = this.prisma.charts.createMany({
-      data: createChartDto
-    })
+      data: createChartDto,
+    });
 
-    this.gatewayService.sendUpdateToClients(chart)
+    this.gatewayService.sendUpdateToClients(chart);
     return chart;
   }
 
@@ -25,15 +25,14 @@ export class ChartsService {
       select: {
         id: true,
         label: true,
-        data: true
-      }
-    })
+        data: true,
+      },
+    });
 
-    this.gatewayService.sendUpdateToClients(chart)
+    this.gatewayService.sendUpdateToClients(chart);
 
     return chart;
   }
-
 
   findOne(id: number) {
     return `This action returns a #${id} chart`;
@@ -44,17 +43,14 @@ export class ChartsService {
       where: { id },
       data: {
         ...updateChartDto,
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      },
+    });
 
-    })
-
-    const find = this.findAll()
-    this.gatewayService.sendUpdateToClients(find)
+    const find = this.findAll();
+    this.gatewayService.sendUpdateToClients(find);
     return chart;
   }
-
-  
 
   remove(id: number) {
     return `This action removes a #${id} chart`;

@@ -2,10 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { SalesRepository } from 'src/repositories/sales.repository';
 import { UpdateSaleDto } from './dto/update-sale.dto';
+import { SocketGateway } from 'src/gateway/socket.gateway';
 
 @Injectable()
 export class SalesService {
-  constructor(private readonly salesRepository: SalesRepository) {}
+  constructor(
+    private readonly salesRepository: SalesRepository,
+    private readonly gatewayService: SocketGateway,
+  ) {}
 
   async createSales(dto: CreateSaleDto) {
     const checkQuantityStockProduct = await this.salesRepository.checkStock(
@@ -30,32 +34,36 @@ export class SalesService {
     );
 
     if (existingSale) {
-      return await this.salesRepository.updateSales(
+      const updatedSale = await this.salesRepository.updateSales(
         existingSale.id,
         dto.quantity_sold,
         totalBilled,
       );
+
+      const allSales = await this.salesRepository.findAllSales(dto.store_id);
+
+      this.gatewayService.sendSalesProducts(allSales);
+
+      return updatedSale;
     }
 
-    return await this.salesRepository.createSale({
+    const response = await this.salesRepository.createSale({
       ...dto,
       total_billed: totalBilled,
     });
+
+    this.gatewayService.sendSalesProducts(response);
+
+    return response;
   }
 
   async findAllSalesByStore(dto: UpdateSaleDto) {
     const response = await this.salesRepository.findAllSales(dto.store_id);
 
-    if (!response || response.length === 0) {
+    if (!response) {
       throw new NotFoundException('Sales not found');
     }
 
-    const label = response.map((sale) => sale.Products.name);
-    const data = response.map((sale) => sale.total_billed);
-
-    return {
-      label: label,
-      data: data,
-    };
+    return response;
   }
 }

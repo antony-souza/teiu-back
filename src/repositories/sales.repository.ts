@@ -12,6 +12,15 @@ export class SalesRepository {
         product_id: product_id,
         store_id: store_id,
       },
+      select: {
+        id: true,
+        total_billed: true,
+        Products: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
   }
 
@@ -34,8 +43,12 @@ export class SalesRepository {
     });
   }
 
-  async updateSales(id: string, quantity_sold: number, total_billed: number) {
-    return await this.prismaService.sales.update({
+  async updateSales(
+    id: string,
+    quantity_sold: number,
+    total_billed: number,
+  ): Promise<any[]> {
+    const response = await this.prismaService.sales.update({
       where: { id: id },
       data: {
         updatedAt: new Date(),
@@ -46,7 +59,17 @@ export class SalesRepository {
           increment: total_billed,
         },
       },
+      select: {
+        total_billed: true,
+        Products: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
+
+    return [response];
   }
 
   async updateStock(product_id: string, quantity_sold: number) {
