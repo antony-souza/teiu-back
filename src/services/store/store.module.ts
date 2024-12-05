@@ -7,6 +7,11 @@ import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 
 @Module({
   controllers: [StoreController],
-  providers: [StoreService, PrismaService, StoreRepository, UploadFileFactoryService],
+  providers: [
+    StoreService,
+    PrismaService,
+    StoreRepository,
+    UploadFileFactoryService,
+  ],
 })
-export class StoreModule { }
+export class StoreModule {}

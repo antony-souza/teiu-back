@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateSaleDto {
   @IsString()
@@ -15,14 +15,18 @@ export class CreateSaleDto {
 
   @Transform(({ value }) => parseInt(value))
   @IsNumber()
+  @IsNotEmpty()
   quantity_sold: number;
 
   @IsString()
+  @IsNotEmpty()
   product_id: string;
 
   @IsString()
+  @IsNotEmpty()
   store_id: string;
 
   @IsString()
+  @IsNotEmpty()
   user_id: string;
 }

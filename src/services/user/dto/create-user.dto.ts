@@ -1,24 +1,31 @@
-import { Role } from "@prisma/client";
-import { IsOptional, IsString } from "class-validator";
+import { Role } from '@prisma/client';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateUserDto {
-    @IsString()
-    @IsOptional()
-    id?: string;
+  @IsString()
+  @IsOptional()
+  id?: string;
 
-    @IsString()
-    name: string;
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
-    @IsString()
-    email: string;
+  @IsString()
+  @IsNotEmpty()
+  email: string;
 
-    @IsString()
-    password: string;
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
-    @IsString()
-    role: Role;
+  @IsString()
+  @IsNotEmpty()
+  role: Role;
 
-    image_url_string?: string;
+  store_id?: string;
 
-    image_url?: Express.Multer.File
+  image_url_string?: string;
+
+  @IsNotEmpty()
+  image_url?: Express.Multer.File;
 }

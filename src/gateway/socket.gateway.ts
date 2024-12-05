@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import {
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
@@ -8,12 +9,13 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { SalesRepository } from 'src/repositories/sales.repository';
 
 @WebSocketGateway({ cors: true })
 export class SocketGateway
   implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {
-  constructor() {}
+  constructor(private readonly salesRepository: SalesRepository) {}
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('GatewaySocket');
 
@@ -38,8 +40,12 @@ export class SocketGateway
     await this.server.emit('update', data);
   }
 
-  async sendSalesProducts(data: any) {
-    console.log('Dados recebidos no cliente:', data);
+  async sendInitSalesProducts(data: any) {
+    await this.server.emit('initSales', data);
+  }
+
+  @SubscribeMessage('sales')
+  async sendSalesProducts(@MessageBody() data: any) {
     await this.server.emit('sales', data);
   }
 }

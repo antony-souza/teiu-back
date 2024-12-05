@@ -6,27 +6,28 @@ import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 
 @Injectable()
 export class StoreService {
-
   constructor(
     private readonly storeRepository: StoreRepository,
-    private readonly uploadFileFactoryService: UploadFileFactoryService
-  ) { }
+    private readonly uploadFileFactoryService: UploadFileFactoryService,
+  ) {}
 
   async create(dto: CreateStoreDto) {
-    const existingStore = await this.storeRepository.checkStoreByIdCount(dto.id)
+    const existingStore = await this.storeRepository.checkStoreByIdCount(
+      dto.id,
+    );
 
     if (existingStore > 0) {
-      throw new ConflictException('Store already exists')
+      throw new ConflictException('Store already exists');
     }
 
-    let url = ''
+    let url = '';
     if (dto.image_url) {
-      url = await this.uploadFileFactoryService.upload(dto.image_url)
+      url = await this.uploadFileFactoryService.upload(dto.image_url);
     }
 
-    dto.image_url_string = await url
+    dto.image_url_string = await url;
 
-    return this.storeRepository.createStore(dto)
+    return this.storeRepository.createStore(dto);
   }
 
   findAll() {

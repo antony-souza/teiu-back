@@ -15,9 +15,10 @@ model Users {
   enabled   Boolean  @default(true)
   image_url String   @default("")
   role      Role     @default(USER)
+  store_id  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  Store     Store[]
+  Store     Store?   @relation("StoreUsers", fields: [store_id], references: [id])
   Sales     Sales[]
 
   @@map("users")
@@ -28,10 +29,9 @@ model Store {
   name       String
   image_url  String       @default("")
   enabled    Boolean      @default(true)
-  user_id    String
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
-  User       Users        @relation(fields: [user_id], references: [id])
+  User       Users[]      @relation("StoreUsers")
   Products   Products[]
   Categories Categories[]
   Sales      Sales[]

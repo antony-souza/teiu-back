@@ -1,11 +1,12 @@
-import { Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
-import { PrismaClient, Role, Users } from "@prisma/client";
-import * as bcrypt from "bcryptjs";
-import { environment } from "./environment/environment-prod";
+import { Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { PrismaClient, Role, Users } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
+import { environment } from './environment/environment-prod';
 
 export class PrismaInitialService
   extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy {
+  implements OnModuleInit, OnModuleDestroy
+{
   constructor() {
     super();
   }
@@ -26,9 +27,10 @@ async function main() {
     name: environment.DEFAULT_USER_NAME,
     email: environment.DEFAULT_USER_EMAIL,
     role: environment.DEFAULT_USER_ROLE as Role,
-    image_url:environment.DEFAULT_USER_IMAGE_URL,
-    id: "1", 
-    password: "",
+    image_url: environment.DEFAULT_USER_IMAGE_URL,
+    id: '1',
+    password: '',
+    store_id: null,
     createdAt: undefined,
     enabled: true,
     updatedAt: undefined,
@@ -43,7 +45,10 @@ async function main() {
   });
 
   if (!checkIfExistUser) {
-    const hashedPassword = await bcrypt.hash(environment.DEFAULT_USER_PASSWORD, 11);
+    const hashedPassword = await bcrypt.hash(
+      environment.DEFAULT_USER_PASSWORD,
+      11,
+    );
 
     await prismaService.users.create({
       data: {
@@ -52,11 +57,11 @@ async function main() {
       },
     });
 
-    new Logger().debug("User Created With Success", "Populate");
+    new Logger().debug('User Created With Success', 'Populate');
     return;
   }
 
-  new Logger().debug("User Already Exist", "Populate");
+  new Logger().debug('User Already Exist', 'Populate');
 }
 
 main();
