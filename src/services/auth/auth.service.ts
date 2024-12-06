@@ -32,6 +32,7 @@ export class AuthService {
       user: {
         name: user.name,
         image_url: user.image_url,
+        store_id: user.store_id,
       },
     };
 

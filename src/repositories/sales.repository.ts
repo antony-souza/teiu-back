@@ -84,28 +84,6 @@ export class SalesRepository {
     });
   }
 
-  async findAllSales(store_id: string): Promise<any[]> {
-    return await this.prismaService.sales.findMany({
-      where: {
-        store_id: store_id,
-      },
-      select: {
-        total_billed: true,
-        quantity_sold: true,
-        Products: {
-          select: {
-            name: true,
-          },
-        },
-        User: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
-  }
-
   async findAllSalesByProductStore(storeId: string): Promise<any[]> {
     const groupSalesByProductIdAndStoreId =
       await this.prismaService.sales.groupBy({

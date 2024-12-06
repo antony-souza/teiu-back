@@ -13,14 +13,6 @@ export class SalesController {
   }
 
   @Get('/all/:id')
-  findAll(@Param('id') id: string) {
-    const dto: UpdateSaleDto = {
-      store_id: id,
-    };
-    return this.salesService.findAllSalesByStore(dto);
-  }
-
-  @Get('/allteste/:id')
   findAllSalesForChart(@Param('id') id: string) {
     const dto: UpdateSaleDto = {
       store_id: id,

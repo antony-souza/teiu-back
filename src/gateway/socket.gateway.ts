@@ -1,6 +1,5 @@
 import { Logger } from '@nestjs/common';
 import {
-  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
@@ -19,11 +18,11 @@ export class SocketGateway
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('GatewaySocket');
 
-  afterInit(server: Server) {
+  afterInit() {
     this.logger.log('Init');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  handleConnection(client: Socket) {
     this.logger.log('Client connected:', client.id);
   }
   handleDisconnect(client: Socket) {
@@ -35,17 +34,14 @@ export class SocketGateway
     this.server.emit('message', payload);
   }
 
-  async sendUpdateToClients(data: any) {
-    console.log('Dados recebidos no cliente:', data);
-    await this.server.emit('update', data);
-  }
-
-  async sendInitSalesProducts(data: any) {
-    await this.server.emit('initSales', data);
+  @SubscribeMessage('joinStore')
+  handleJoinStore(client: Socket, store_id: string) {
+    client.join(store_id);
+    this.logger.log(`Client ${client.id} joined store ${store_id}`);
   }
 
   @SubscribeMessage('sales')
-  async sendSalesProducts(@MessageBody() data: any) {
-    await this.server.emit('sales', data);
+  async sendSalesProducts(store_id: string, data: any) {
+    await this.server.to(store_id).emit('sales', data);
   }
 }

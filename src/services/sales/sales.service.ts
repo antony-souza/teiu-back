@@ -51,17 +51,12 @@ export class SalesService {
     });
 
     await this.salesRepository.updateStock(dto.product_id, dto.quantity_sold);
-    this.gatewayService.sendSalesProducts(response);
 
-    return response;
-  }
+    const allSales = await this.salesRepository.findAllSalesByProductStore(
+      dto.store_id,
+    );
 
-  async findAllSalesByStore(dto: UpdateSaleDto) {
-    const response = await this.salesRepository.findAllSales(dto.store_id);
-
-    if (!response) {
-      throw new NotFoundException('Sales not found');
-    }
+    this.gatewayService.sendSalesProducts(dto.store_id, allSales);
 
     return response;
   }
