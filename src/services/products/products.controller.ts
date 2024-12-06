@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseInterceptors,
   UploadedFile,
+  Put,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -30,18 +30,33 @@ export class ProductsController {
     });
   }
 
-  @Get()
+  @Get('/all')
   findAll() {
-    return this.productsService.findAll();
+    return this.productsService.findAllProducts();
   }
 
-  @Patch(':id')
+  @Get('/allstore/:id')
+  findAllByStoreId(@Param('id') storeId: string) {
+    const dto: UpdateProductDto = {
+      store_id: storeId,
+    };
+    return this.productsService.findAllProductsByStoreId(dto);
+  }
+
+  @Put('/update/:id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(updateProductDto);
+    const dto: UpdateProductDto = {
+      id: id,
+      ...updateProductDto,
+    };
+    return this.productsService.update(dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+    const dto: UpdateProductDto = {
+      id: id,
+    };
+    return this.productsService.remove(dto);
   }
 }
