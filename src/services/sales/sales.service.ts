@@ -26,25 +26,6 @@ export class SalesService {
 
     const totalBilled = checkQuantityStockProduct.price * dto.quantity_sold;
 
-    /* const existingSale = await this.salesRepository.findSaleByProductAndStore(
-      dto.product_id,
-      dto.store_id,
-    );
-
-    if (existingSale) {
-      const updatedSale = await this.salesRepository.updateSales(
-        existingSale.id,
-        dto.quantity_sold,
-        totalBilled,
-      );
-
-      const allSales = await this.salesRepository.findAllSales(dto.store_id);
-
-      this.gatewayService.sendSalesProducts(allSales);
-
-      return updatedSale;
-    } */
-
     const response = await this.salesRepository.createSale({
       ...dto,
       total_billed: totalBilled,
@@ -70,6 +51,17 @@ export class SalesService {
       throw new NotFoundException('Sales not found');
     }
 
+    return response;
+  }
+
+  async findAllSalesByStore(dto: UpdateSaleDto) {
+    const response = await this.salesRepository.findAllSalesByStore(
+      dto.store_id,
+    );
+
+    if (!response) {
+      throw new NotFoundException('Sales not found');
+    }
     return response;
   }
 }

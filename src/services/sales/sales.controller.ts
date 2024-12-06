@@ -19,4 +19,12 @@ export class SalesController {
     };
     return this.salesService.findAllSalesByProductStore(dto);
   }
+
+  @Get('/store/all/:id')
+  findAllSales(@Param('id') id: string) {
+    const dto: UpdateSaleDto = {
+      store_id: id,
+    };
+    return this.salesService.findAllSalesByStore(dto);
+  }
 }

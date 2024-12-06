@@ -6,22 +6,40 @@ import { CreateSaleDto } from 'src/services/sales/dto/create-sale.dto';
 export class SalesRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findSaleByProductAndStore(product_id: string, store_id: string) {
-    return await this.prismaService.sales.findFirst({
+  async findAllSalesByStore(store_id: string) {
+    const response = await this.prismaService.sales.findMany({
       where: {
-        product_id: product_id,
         store_id: store_id,
       },
       select: {
-        id: true,
         total_billed: true,
+        quantity_sold: true,
         Products: {
           select: {
             name: true,
+            image_url: true,
+          },
+        },
+        User: {
+          select: {
+            name: true,
+            image_url: true,
           },
         },
       },
     });
+    const result = response.map((previousResponse) => {
+      return {
+        total_billed: previousResponse.total_billed,
+        quantity_sold: previousResponse.quantity_sold,
+        product_name: previousResponse.Products.name,
+        product_image: previousResponse.Products.image_url,
+        user_name: previousResponse.User.name,
+        user_image: previousResponse.User.image_url,
+      };
+    });
+
+    return result;
   }
 
   async createSale(dto: CreateSaleDto) {
