@@ -16,7 +16,7 @@ export class StoreRepository {
   }
 
   async findAllStore() {
-    return await this.prismaService.store.findMany({
+    const response = await this.prismaService.store.findMany({
       select: {
         id: true,
         name: true,
@@ -32,6 +32,7 @@ export class StoreRepository {
         },
       },
     });
+    return response;
   }
 
   async createStore(dto: CreateStoreDto) {

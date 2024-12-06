@@ -68,6 +68,7 @@ export class UserRepository {
         name: true,
         email: true,
         image_url: true,
+        store_id: true,
         role: true,
       },
     });
