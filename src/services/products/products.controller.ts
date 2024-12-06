@@ -52,7 +52,7 @@ export class ProductsController {
     return this.productsService.update(dto);
   }
 
-  @Delete(':id')
+  @Delete('/delete/:id')
   remove(@Param('id') id: string) {
     const dto: UpdateProductDto = {
       id: id,
