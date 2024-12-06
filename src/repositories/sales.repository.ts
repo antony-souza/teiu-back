@@ -91,12 +91,49 @@ export class SalesRepository {
       },
       select: {
         total_billed: true,
+        quantity_sold: true,
         Products: {
+          select: {
+            name: true,
+          },
+        },
+        User: {
           select: {
             name: true,
           },
         },
       },
     });
+  }
+
+  async findAllSalesByProductStore(storeId: string): Promise<any[]> {
+    const groupedSales = await this.prismaService.sales.groupBy({
+      by: ['product_id', 'store_id'],
+      where: {
+        store_id: storeId,
+      },
+      _sum: {
+        total_billed: true,
+        quantity_sold: true,
+      },
+    });
+
+    const result = await Promise.all(
+      groupedSales.map(async (sale) => {
+        const product = await this.prismaService.products.findUnique({
+          where: { id: sale.product_id },
+          select: {
+            name: true,
+          },
+        });
+
+        return {
+          name: product.name,
+          total_billed: sale._sum.total_billed,
+          quantity_sold: sale._sum.quantity_sold,
+        };
+      }),
+    );
+    return result;
   }
 }

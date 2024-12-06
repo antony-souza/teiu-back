@@ -26,6 +26,5 @@ export class CreateUserDto {
 
   image_url_string?: string;
 
-  @IsNotEmpty()
   image_url?: Express.Multer.File;
 }

@@ -16,13 +16,13 @@ export class ProductsService {
   ) {}
 
   async createProduct(dto: CreateProductDto) {
-    const existingProduct = await this.productRepository.checkProductByIdCount(
+    /* const existingProduct = await this.productRepository.checkProductByIdCount(
       dto.id,
-    );
+    ); */
 
-    if (existingProduct > 0) {
+    /* if (existingProduct > 0) {
       throw new ConflictException('Product already exist!');
-    }
+    } */
 
     let url = '';
     if (dto.image_url) {

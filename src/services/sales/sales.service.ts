@@ -24,11 +24,9 @@ export class SalesService {
       throw new NotFoundException('Insufficient stock');
     }
 
-    await this.salesRepository.updateStock(dto.product_id, dto.quantity_sold);
-
     const totalBilled = checkQuantityStockProduct.price * dto.quantity_sold;
 
-    const existingSale = await this.salesRepository.findSaleByProductAndStore(
+    /* const existingSale = await this.salesRepository.findSaleByProductAndStore(
       dto.product_id,
       dto.store_id,
     );
@@ -45,13 +43,14 @@ export class SalesService {
       this.gatewayService.sendSalesProducts(allSales);
 
       return updatedSale;
-    }
+    } */
 
     const response = await this.salesRepository.createSale({
       ...dto,
       total_billed: totalBilled,
     });
 
+    await this.salesRepository.updateStock(dto.product_id, dto.quantity_sold);
     this.gatewayService.sendSalesProducts(response);
 
     return response;
@@ -59,6 +58,18 @@ export class SalesService {
 
   async findAllSalesByStore(dto: UpdateSaleDto) {
     const response = await this.salesRepository.findAllSales(dto.store_id);
+
+    if (!response) {
+      throw new NotFoundException('Sales not found');
+    }
+
+    return response;
+  }
+
+  async findAllSalesByProductStore(dto: UpdateSaleDto) {
+    const response = await this.salesRepository.findAllSalesByProductStore(
+      dto.store_id,
+    );
 
     if (!response) {
       throw new NotFoundException('Sales not found');
