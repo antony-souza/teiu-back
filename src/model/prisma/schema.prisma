@@ -13,7 +13,7 @@ model Users {
   name      String
   password  String
   enabled   Boolean  @default(true)
-  image_url String   @default("")
+  image_url String?  @default("")
   role      Role     @default(USER)
   store_id  String?
   createdAt DateTime @default(now())
@@ -27,7 +27,7 @@ model Users {
 model Store {
   id         String       @id @default(uuid())
   name       String
-  image_url  String       @default("")
+  image_url  String?      @default("")
   enabled    Boolean      @default(true)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
@@ -45,7 +45,7 @@ model Products {
   price       Float
   description String
   quantity    Int
-  image_url   String     @default("")
+  image_url   String?    @default("")
   enabled     Boolean    @default(true)
   store_id    String
   category_id String
@@ -61,7 +61,7 @@ model Products {
 model Categories {
   id        String     @id @default(uuid())
   name      String
-  image_url String     @default("")
+  image_url String?    @default("")
   store_id  String
   enabled   Boolean    @default(true)
   createdAt DateTime   @default(now())

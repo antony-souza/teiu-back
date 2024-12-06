@@ -28,10 +28,17 @@ export class UserRepository {
     return query;
   }
 
-  async checkUserById(id: string): Promise<IUser> {
+  async checkUserById(id: string) {
     const query = await this.prismaService.users.findUnique({
       where: {
         id: id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image_url: true,
+        role: true,
       },
     });
 
@@ -53,8 +60,8 @@ export class UserRepository {
     });
   }
 
-  async getAllUsers(): Promise<IUser[]> {
-    return await this.prismaService.users.findMany({
+  async getAllUsers() {
+    const response = await this.prismaService.users.findMany({
       select: {
         id: true,
         enabled: true,
@@ -64,6 +71,18 @@ export class UserRepository {
         role: true,
       },
     });
+
+    const result = response.map((previousResponse) => {
+      return {
+        id: previousResponse.id,
+        enabled: previousResponse.enabled,
+        name: previousResponse.name,
+        email: previousResponse.email,
+        image_url: previousResponse.image_url,
+        role: previousResponse.role === 'ADMIN' ? 'Administrador' : 'Usuário',
+      };
+    });
+    return result;
   }
 
   async create(dto: CreateUserDto) {
@@ -86,7 +105,7 @@ export class UserRepository {
     return query;
   }
 
-  async update(dto: UpdateUserDto): Promise<IUser> {
+  async update(dto: UpdateUserDto) {
     return await this.prismaService.users.update({
       where: {
         id: dto.id,

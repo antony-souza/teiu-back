@@ -22,9 +22,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   role: Role;
 
+  @IsOptional()
   store_id?: string;
 
+  @IsOptional()
   image_url_string?: string;
 
+  @IsOptional()
   image_url?: Express.Multer.File;
 }

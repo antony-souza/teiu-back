@@ -62,17 +62,17 @@ export class UserService {
     return response;
   }
 
-  async getAllUsers(): Promise<IUser[]> {
+  async getAllUsers() {
     const response = await this.userRepository.getAllUsers();
 
-    if (response.length < 1) {
+    if (!response) {
       throw new NotFoundException('No all users found');
     }
 
     return response;
   }
 
-  async update(updateUserDto: UpdateUserDto): Promise<IUser> {
+  async update(updateUserDto: UpdateUserDto) {
     const existingUser = await this.userRepository.checkUserById(
       updateUserDto.id,
     );
@@ -89,9 +89,9 @@ export class UserService {
       );
     }
 
-    let url = existingUser.image_url;
+    let url = await existingUser.image_url;
 
-    if (url) {
+    if (updateUserDto.image_url) {
       url = await this.uploadFileFactoryService.upload(updateUserDto.image_url);
     }
 
@@ -101,8 +101,6 @@ export class UserService {
       ...updateUserDto,
       password: hashPassword,
     });
-
-    response.message = 'User updated successfully';
 
     return response;
   }
