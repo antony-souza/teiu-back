@@ -21,7 +21,7 @@ export class SalesController {
   }
 
   @Get('/allteste/:id')
-  findAllSales(@Param('id') id: string) {
+  findAllSalesForChart(@Param('id') id: string) {
     const dto: UpdateSaleDto = {
       store_id: id,
     };

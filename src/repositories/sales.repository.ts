@@ -107,30 +107,30 @@ export class SalesRepository {
   }
 
   async findAllSalesByProductStore(storeId: string): Promise<any[]> {
-    const groupedSales = await this.prismaService.sales.groupBy({
-      by: ['product_id', 'store_id'],
-      where: {
-        store_id: storeId,
-      },
-      _sum: {
-        total_billed: true,
-        quantity_sold: true,
-      },
-    });
+    const groupSalesByProductIdAndStoreId =
+      await this.prismaService.sales.groupBy({
+        where: { store_id: storeId },
+        by: ['product_id', 'store_id'],
+        _sum: {
+          quantity_sold: true,
+          total_billed: true,
+        },
+      });
 
     const result = await Promise.all(
-      groupedSales.map(async (sale) => {
+      groupSalesByProductIdAndStoreId.map(async (previousGroupData) => {
         const product = await this.prismaService.products.findUnique({
-          where: { id: sale.product_id },
+          where: {
+            id: previousGroupData.product_id,
+          },
           select: {
             name: true,
           },
         });
-
         return {
           name: product.name,
-          total_billed: sale._sum.total_billed,
-          quantity_sold: sale._sum.quantity_sold,
+          quantity_sold: previousGroupData._sum.quantity_sold,
+          total_billed: previousGroupData._sum.total_billed,
         };
       }),
     );
