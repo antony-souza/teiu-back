@@ -103,12 +103,18 @@ export class SalesRepository {
           },
           select: {
             name: true,
+            Store: {
+              select: {
+                name: true,
+              },
+            },
           },
         });
         return {
           name: product.name,
           quantity_sold: previousGroupData._sum.quantity_sold,
           total_billed: previousGroupData._sum.total_billed,
+          store: product.Store.name,
         };
       }),
     );
