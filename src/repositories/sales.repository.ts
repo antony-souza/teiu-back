@@ -26,10 +26,16 @@ export class SalesRepository {
             image_url: true,
           },
         },
+        Store: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
     const result = response.map((previousResponse) => {
       return {
+        store_name: previousResponse.Store.name,
         total_billed: previousResponse.total_billed,
         quantity_sold: previousResponse.quantity_sold,
         product_name: previousResponse.Products.name,

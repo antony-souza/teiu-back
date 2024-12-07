@@ -80,7 +80,7 @@ export class UserRepository {
         name: previousResponse.name,
         email: previousResponse.email,
         image_url: previousResponse.image_url,
-        role: previousResponse.role === 'ADMIN' ? 'Administrador' : 'Usuário',
+        role: previousResponse.role === 'ADMIN' ? 'Administrador' : 'Cliente',
       };
     });
     return result;
