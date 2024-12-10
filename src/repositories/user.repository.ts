@@ -86,6 +86,48 @@ export class UserRepository {
     return result;
   }
 
+  async getUserEnableByStore(id: string) {
+    const response = await this.prismaService.users.findMany({
+      where: {
+        store_id: id,
+        enabled: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image_url: true,
+        Store: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const result = Promise.all(
+      response.map(async (previousResponse) => {
+        const checkStoreById = await this.prismaService.store.findUnique({
+          where: {
+            id: previousResponse.Store.id,
+          },
+          select: {
+            name: true,
+          },
+        });
+        return {
+          id: previousResponse.id,
+          name: previousResponse.name,
+          email: previousResponse.email,
+          image_url: previousResponse.image_url,
+          store: checkStoreById.name,
+        };
+      }),
+    );
+    return result;
+  }
+
   async create(dto: CreateUserDto) {
     const query = await this.prismaService.users.create({
       data: {

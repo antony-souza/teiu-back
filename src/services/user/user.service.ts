@@ -72,6 +72,16 @@ export class UserService {
     return response;
   }
 
+  async getUserEnableByStore(id: string) {
+    const response = await this.userRepository.getUserEnableByStore(id);
+
+    if (!response) {
+      throw new NotFoundException('Users not found');
+    }
+
+    return response;
+  }
+
   async update(updateUserDto: UpdateUserDto) {
     const existingUser = await this.userRepository.checkUserById(
       updateUserDto.id,

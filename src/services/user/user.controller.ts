@@ -30,6 +30,11 @@ export class UserController {
     });
   }
 
+  @Get('/all/enable/:id')
+  getUserEnableStore(@Param('id') storeId: string) {
+    return this.userService.getUserEnableByStore(storeId);
+  }
+
   @Get('/all/enable/true')
   getAllUsersEnableTrue() {
     return this.userService.getAllUsersEnableTrue();
