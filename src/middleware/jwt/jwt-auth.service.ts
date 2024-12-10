@@ -10,7 +10,6 @@ export class AuthJwtService {
   generateToken(user: Users): string {
     const payload = {
       id: user.id,
-      name: user.name,
     };
     return this.jwtService.sign(payload, { secret: environment.secreatKey });
   }

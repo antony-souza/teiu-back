@@ -49,7 +49,7 @@ export class ProductsService {
       throw new NotFoundException('No products found!');
     }
 
-    return response;
+    return [response];
   }
 
   async update(dto: UpdateProductDto) {

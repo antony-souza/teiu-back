@@ -79,6 +79,7 @@ model Sales {
   product_id    String
   user_id       String
   store_id      String
+  date          String   @default("00/00/0000")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now())
   User          Users    @relation(fields: [user_id], references: [id])
@@ -86,16 +87,6 @@ model Sales {
   Store         Store    @relation(fields: [store_id], references: [id])
 
   @@map("sales")
-}
-
-model Charts {
-  id        String   @id @default(uuid())
-  label     String
-  data      Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  @@map("charts")
 }
 
 enum Role {

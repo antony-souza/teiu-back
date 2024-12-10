@@ -11,9 +11,13 @@ export class SalesRepository {
       where: {
         store_id: store_id,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
       select: {
         total_billed: true,
         quantity_sold: true,
+        date: true,
         Products: {
           select: {
             name: true,
@@ -38,6 +42,7 @@ export class SalesRepository {
         store_name: previousResponse.Store.name,
         total_billed: previousResponse.total_billed,
         quantity_sold: previousResponse.quantity_sold,
+        date: previousResponse.date,
         product_name: previousResponse.Products.name,
         product_image: previousResponse.Products.image_url,
         user_name: previousResponse.User.name,
@@ -54,6 +59,7 @@ export class SalesRepository {
         total_billed: dto.total_billed,
         quantity_sold: dto.quantity_sold,
         product_id: dto.product_id,
+        date: dto.date,
         store_id: dto.store_id,
         user_id: dto.user_id,
       },

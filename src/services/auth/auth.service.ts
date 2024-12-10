@@ -30,6 +30,7 @@ export class AuthService {
     const response = {
       token: token,
       user: {
+        id: user.id,
         name: user.name,
         image_url: user.image_url,
         store_id: user.store_id,

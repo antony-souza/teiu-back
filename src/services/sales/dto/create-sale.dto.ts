@@ -20,6 +20,10 @@ export class CreateSaleDto {
 
   @IsString()
   @IsNotEmpty()
+  date: string;
+
+  @IsString()
+  @IsNotEmpty()
   product_id: string;
 
   @IsString()
