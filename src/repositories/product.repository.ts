@@ -50,7 +50,7 @@ export class ProductRepository {
   }
 
   findAllProductsByStoreId(storeId: string) {
-    const response = this.prismaService.products.findFirst({
+    const response = this.prismaService.products.findMany({
       where: {
         store_id: storeId,
         enabled: true,
