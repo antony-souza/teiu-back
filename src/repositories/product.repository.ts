@@ -49,8 +49,8 @@ export class ProductRepository {
     return response;
   }
 
-  findAllProductsByStoreId(storeId: string) {
-    const response = this.prismaService.products.findMany({
+  async findAllProductsByStoreId(storeId: string) {
+    const response = await this.prismaService.products.findMany({
       where: {
         store_id: storeId,
         enabled: true,
@@ -77,7 +77,31 @@ export class ProductRepository {
       },
     });
 
-    return response;
+    const result = await Promise.all(
+      response.map(async (previousResponse) => {
+        const existingStore = await this.prismaService.store.findFirst({
+          where: {
+            id: previousResponse.Store.id,
+          },
+          select: {
+            id: true,
+            name: true,
+          },
+        });
+        return {
+          store_id: existingStore.id,
+          product_id: previousResponse.id,
+          store_name: existingStore.name,
+          product_name: previousResponse.name,
+          category_name: previousResponse.Category.name,
+          product_price: previousResponse.price,
+          product_quantity: previousResponse.quantity,
+          product_image_url: previousResponse.image_url,
+          product_description: previousResponse.description,
+        };
+      }),
+    );
+    return result;
   }
 
   async createProduct(dto: CreateProductDto) {

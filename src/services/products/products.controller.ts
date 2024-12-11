@@ -35,7 +35,7 @@ export class ProductsController {
     return this.productsService.findAllProducts();
   }
 
-  @Get('/allstore/:id')
+  @Get('/store/all/:id')
   findAllByStoreId(@Param('id') storeId: string) {
     const dto: UpdateProductDto = {
       store_id: storeId,

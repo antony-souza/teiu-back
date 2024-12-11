@@ -106,7 +106,7 @@ export class UserRepository {
       },
     });
 
-    const result = Promise.all(
+    const result = await Promise.all(
       response.map(async (previousResponse) => {
         const checkStoreById = await this.prismaService.store.findUnique({
           where: {
