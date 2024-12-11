@@ -44,12 +44,17 @@ export class ProductsController {
   }
 
   @Put('/update/:id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    const dto: UpdateProductDto = {
-      id: id,
+  @UseInterceptors(FileInterceptor('image_url'))
+  update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+    @UploadedFile() image_url: Express.Multer.File,
+  ) {
+    return this.productsService.update({
       ...updateProductDto,
-    };
-    return this.productsService.update(dto);
+      id: id,
+      image_url: image_url,
+    });
   }
 
   @Delete('/delete/:id')

@@ -88,7 +88,7 @@ export class UserService {
     );
 
     if (!existingUser) {
-      throw new UnauthorizedException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     let hashPassword = updateUserDto.password;

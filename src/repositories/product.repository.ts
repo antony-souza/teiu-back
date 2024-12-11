@@ -129,8 +129,14 @@ export class ProductRepository {
         description: dto.description,
         image_url: dto.image_url_string,
         quantity: dto.quantity,
-        category_id: dto.category_id,
-        store_id: dto.store_id,
+      },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        description: true,
+        image_url: true,
+        quantity: true,
       },
     });
   }

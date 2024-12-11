@@ -61,7 +61,7 @@ export class ProductsService {
       throw new NotFoundException('Product not found');
     }
 
-    let url = existingProduct.image_url;
+    let url = await existingProduct.image_url;
 
     if (dto.image_url) {
       url = await this.UploadFileFactoryService.upload(dto.image_url);
