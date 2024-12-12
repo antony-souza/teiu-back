@@ -23,6 +23,10 @@ export class CategoriesService {
     return await this.categoryRepository.createCategory(dto);
   }
 
+  getAllCategoriesByStoreId(dto: UpdateCategoryDto) {
+    return this.categoryRepository.findAllCategoriesByStoreId(dto.store_id);
+  }
+
   findAll() {
     const response = this.categoryRepository.findAllCategories();
 

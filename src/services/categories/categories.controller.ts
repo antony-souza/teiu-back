@@ -35,6 +35,14 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
+  @Get('/all/:id')
+  findAllByStoreId(@Param('id') storeId: string) {
+    const dto: UpdateCategoryDto = {
+      store_id: storeId,
+    };
+    return this.categoriesService.getAllCategoriesByStoreId(dto);
+  }
+
   @Put('/update/:id')
   @UseInterceptors(FileInterceptor('image_url'))
   update(

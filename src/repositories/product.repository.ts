@@ -149,9 +149,6 @@ export class ProductRepository {
       data: {
         enabled: false,
       },
-      select: {
-        enabled: true,
-      },
     });
   }
 }

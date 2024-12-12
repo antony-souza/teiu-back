@@ -39,6 +39,19 @@ export class CategoryRepository {
     });
   }
 
+  async findAllCategoriesByStoreId(storeId: string) {
+    return await this.prismaService.categories.findMany({
+      where: {
+        store_id: storeId,
+        enabled: true,
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+  }
+
   async createCategory(dto: CreateCategoryDto) {
     return await this.prismaService.categories.create({
       data: {
