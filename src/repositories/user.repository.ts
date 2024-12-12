@@ -3,12 +3,7 @@ import { IUser } from 'src/interfaces/user.interface';
 import { PrismaService } from 'src/provider/prisma/prisma-client';
 import { CreateUserDto } from 'src/services/user/dto/create-user.dto';
 import { UpdateUserDto } from 'src/services/user/dto/update-user.dto';
-
-const cargoMap = {
-  ADMIN: 'Gerente',
-  DEV: 'Desenvolvedor',
-  USER: 'Funcionário',
-};
+import { rolesMap } from 'src/utils/rolesmap/rolesmap';
 
 @Injectable()
 export class UserRepository {
@@ -86,7 +81,7 @@ export class UserRepository {
         name: previousResponse.name,
         email: previousResponse.email,
         image_url: previousResponse.image_url,
-        role: cargoMap[previousResponse.role],
+        role: rolesMap[previousResponse.role],
       };
     });
     return result;
@@ -128,7 +123,7 @@ export class UserRepository {
           name: previousResponse.name,
           email: previousResponse.email,
           image_url: previousResponse.image_url,
-          role: cargoMap[previousResponse.role],
+          role: rolesMap[previousResponse.role],
           store: checkStoreById.name,
         };
       }),

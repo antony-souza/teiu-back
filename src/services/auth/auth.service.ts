@@ -4,6 +4,7 @@ import { Users } from '@prisma/client';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
 import { AuthRepository } from 'src/repositories/auth.repository';
+import { rolesMap } from 'src/utils/rolesmap/rolesmap';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +35,7 @@ export class AuthService {
         name: user.name,
         image_url: user.image_url,
         store_id: user.store_id,
+        role: rolesMap[user.role] || 'Usuário',
       },
     };
 
