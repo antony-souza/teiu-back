@@ -4,6 +4,12 @@ import { PrismaService } from 'src/provider/prisma/prisma-client';
 import { CreateUserDto } from 'src/services/user/dto/create-user.dto';
 import { UpdateUserDto } from 'src/services/user/dto/update-user.dto';
 
+const cargoMap = {
+  ADMIN: 'Gerente',
+  DEV: 'Desenvolvedor',
+  USER: 'Funcionário',
+};
+
 @Injectable()
 export class UserRepository {
   constructor(private readonly prismaService: PrismaService) {}
@@ -80,7 +86,7 @@ export class UserRepository {
         name: previousResponse.name,
         email: previousResponse.email,
         image_url: previousResponse.image_url,
-        role: previousResponse.role === 'ADMIN' ? 'Administrador' : 'Cliente',
+        role: cargoMap[previousResponse.role],
       };
     });
     return result;
@@ -97,6 +103,7 @@ export class UserRepository {
         name: true,
         email: true,
         image_url: true,
+        role: true,
         Store: {
           select: {
             id: true,
@@ -121,6 +128,7 @@ export class UserRepository {
           name: previousResponse.name,
           email: previousResponse.email,
           image_url: previousResponse.image_url,
+          role: cargoMap[previousResponse.role],
           store: checkStoreById.name,
         };
       }),
@@ -134,6 +142,7 @@ export class UserRepository {
         name: dto.name,
         email: dto.email,
         role: dto.role,
+        store_id: dto.store_id,
         image_url: dto.image_url_string,
         password: dto.password,
       },

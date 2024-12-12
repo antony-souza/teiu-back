@@ -20,7 +20,6 @@ export class UserService {
 
   async create(dto: CreateUserDto) {
     const existingUser = await this.userRepository.checkUserByEmail(dto.email);
-    console.log(existingUser);
 
     if (existingUser > 0) {
       throw new UnauthorizedException('User already exists');

@@ -90,6 +90,7 @@ model Sales {
 }
 
 enum Role {
+  DEV
   ADMIN
   USER
 }
