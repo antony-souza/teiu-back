@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsDecimal, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
@@ -9,10 +9,7 @@ export class CreateProductDto {
   @IsString()
   name: string;
 
-  @Transform(({ value }) =>
-    parseFloat(value.replace(/\./g, '').replace(',', '.')),
-  )
-  @IsNumber()
+  @IsDecimal()
   price: number;
 
   @IsString()

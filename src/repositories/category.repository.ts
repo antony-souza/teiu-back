@@ -40,7 +40,7 @@ export class CategoryRepository {
   }
 
   async findAllCategoriesByStoreId(storeId: string) {
-    return await this.prismaService.categories.findMany({
+    const response = await this.prismaService.categories.findMany({
       where: {
         store_id: storeId,
         enabled: true,
@@ -48,8 +48,24 @@ export class CategoryRepository {
       select: {
         id: true,
         name: true,
+        image_url: true,
+        Store: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
+
+    const result = response.map((category) => {
+      return {
+        id: category.id,
+        name: category.name,
+        image_url: category.image_url,
+        store_name: category.Store.name,
+      };
+    });
+    return result;
   }
 
   async createCategory(dto: CreateCategoryDto) {

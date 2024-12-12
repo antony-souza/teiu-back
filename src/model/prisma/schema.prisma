@@ -42,7 +42,7 @@ model Store {
 model Products {
   id          String     @id @default(uuid())
   name        String
-  price       Float
+  price       Decimal    @db.Decimal(10, 2)
   description String
   quantity    Int
   image_url   String     @default("")

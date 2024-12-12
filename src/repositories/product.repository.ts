@@ -125,7 +125,7 @@ export class ProductRepository {
       },
       data: {
         name: dto.name,
-        price: dto.price,
+        price: Number(dto.price),
         description: dto.description,
         image_url: dto.image_url_string,
         quantity: dto.quantity,

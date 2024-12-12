@@ -24,7 +24,8 @@ export class SalesService {
       throw new NotFoundException('Insufficient stock');
     }
 
-    const totalBilled = checkQuantityStockProduct.price * dto.quantity_sold;
+    const totalBilled =
+      Number(checkQuantityStockProduct.price) * dto.quantity_sold;
 
     const response = await this.salesRepository.createSale({
       ...dto,
