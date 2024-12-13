@@ -125,9 +125,10 @@ export class ProductRepository {
       },
       data: {
         name: dto.name,
-        price: Number(dto.price),
+        price: dto.price,
         description: dto.description,
         image_url: dto.image_url_string,
+        category_id: dto.category_id,
         quantity: dto.quantity,
       },
       select: {
