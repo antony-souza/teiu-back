@@ -27,7 +27,7 @@ export class AuthJwtService {
       throw new UnauthorizedException('Token não fornecido');
     }
 
-    const [type, token] = authorizationHeader.split(' ');
+    const [type, token] = authorizationHeader.split(' ') ?? [];
     if (type !== 'Bearer' || !token) {
       throw new UnauthorizedException(
         'Tipo de token inválido ou token não fornecido',

@@ -6,8 +6,11 @@ import { PrismaService } from 'src/provider/prisma/prisma-client';
 import { CategoryRepository } from 'src/repositories/category.repository';
 import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
 import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { UserModule } from '../user/user.module';
 
 @Module({
+  imports: [UserModule],
   controllers: [CategoriesController],
   providers: [
     CategoriesService,
@@ -16,6 +19,7 @@ import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
     CategoryRepository,
     JwtAuthGuard,
     AuthJwtService,
+    JwtService,
   ],
 })
 export class CategoriesModule {}

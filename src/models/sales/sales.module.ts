@@ -6,8 +6,11 @@ import { SalesRepository } from 'src/repositories/sales.repository';
 import { SocketGateway } from 'src/gateway/socket.gateway';
 import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
 import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { UserModule } from '../user/user.module';
 
 @Module({
+  imports: [UserModule],
   controllers: [SalesController],
   providers: [
     SalesService,
@@ -15,6 +18,7 @@ import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
     SalesRepository,
     SocketGateway,
     JwtAuthGuard,
+    JwtService,
     AuthJwtService,
   ],
 })

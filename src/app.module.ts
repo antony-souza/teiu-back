@@ -11,13 +11,19 @@ import { StoreModule } from './models/store/store.module';
 import { PrismaService } from './provider/prisma/prisma-client';
 import { CategoriesModule } from './models/categories/categories.module';
 import { SalesModule } from './models/sales/sales.module';
+import { environment } from 'environment/environment';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    JwtModule,
+    JwtModule.register({
+      secret: environment.secreatKey,
+      signOptions: { expiresIn: '1h' },
+    }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     AuthModule,
     UserModule,
     ProductsModule,

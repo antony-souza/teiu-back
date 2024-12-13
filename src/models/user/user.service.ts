@@ -141,4 +141,14 @@ export class UserService {
 
     return response;
   }
+
+  async getUserByIdRole(id: string) {
+    const response = await this.userRepository.getUserByIdRole(id);
+
+    if (!response) {
+      throw new NotFoundException('User not found');
+    }
+
+    return response;
+  }
 }

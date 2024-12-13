@@ -5,12 +5,16 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
+import { UserService } from 'src/models/user/user.service';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private authJwtService: AuthJwtService) {}
+  constructor(
+    private authJwtService: AuthJwtService,
+    private readonly userService: UserService,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const authorizationHeader = request.headers.authorization;
 
@@ -19,15 +23,19 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     const token = this.authJwtService.getToken(authorizationHeader);
-    const user = this.authJwtService.verifyToken(token);
+    const getUserIdFromToken = this.authJwtService.verifyToken(token);
 
+    const user = await this.userService.getUserByIdRole(getUserIdFromToken.id);
     if (!user) {
       throw new UnauthorizedException(
         'Usuário não autenticado ou token inválido',
       );
     }
 
-    request.user = user;
+    request.user = {
+      token: token,
+      role: user.role,
+    };
 
     return true;
   }

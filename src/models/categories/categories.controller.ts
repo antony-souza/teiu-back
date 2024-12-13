@@ -17,9 +17,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Roles, RolesGuard } from 'src/guards/role-guards.service';
 import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
 
+@Controller('/categories')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('DEV', 'ADMIN', 'USER')
-@Controller('/categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 

@@ -46,6 +46,17 @@ export class UserRepository {
     return query;
   }
 
+  getUserByIdRole(id: string) {
+    return this.prismaService.users.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        role: true,
+      },
+    });
+  }
+
   async getAllUsersEnableTrue(): Promise<IUser[]> {
     return await this.prismaService.users.findMany({
       where: {

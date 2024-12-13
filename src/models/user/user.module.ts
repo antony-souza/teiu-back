@@ -6,7 +6,7 @@ import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 import GeneratePasswordService from 'src/utils/generate-password.service';
 import { PrismaService } from 'src/provider/prisma/prisma-client';
 import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
-import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   controllers: [UserController],
@@ -17,7 +17,8 @@ import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
     GeneratePasswordService,
     PrismaService,
     AuthJwtService,
-    JwtAuthGuard,
+    JwtService,
   ],
+  exports: [UserService],
 })
 export class UserModule {}
