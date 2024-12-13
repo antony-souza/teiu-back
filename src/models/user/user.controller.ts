@@ -8,12 +8,17 @@ import {
   UseInterceptors,
   UploadedFile,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
+import { Roles, RolesGuard } from 'src/guards/role-guards.service';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('DEV', 'ADMIN')
 @Controller('/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

@@ -4,6 +4,8 @@ import { ProductsController } from './products.controller';
 import { PrismaService } from 'src/provider/prisma/prisma-client';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 import { ProductRepository } from 'src/repositories/product.repository';
+import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
+import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
 
 @Module({
   controllers: [ProductsController],
@@ -11,6 +13,9 @@ import { ProductRepository } from 'src/repositories/product.repository';
     ProductsService,
     PrismaService,
     UploadFileFactoryService,
-    ProductRepository],
+    ProductRepository,
+    JwtAuthGuard,
+    AuthJwtService,
+  ],
 })
-export class ProductsModule { }
+export class ProductsModule {}

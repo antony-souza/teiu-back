@@ -1,16 +1,14 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateStoreDto {
   @IsString()
   @IsOptional()
   id?: string;
 
-  @IsNotEmpty()
   @IsString()
   name: string;
 
   @IsString()
-  @IsNotEmpty()
   user_id: string;
 
   image_url_string?: string;

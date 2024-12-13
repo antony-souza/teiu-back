@@ -8,12 +8,17 @@ import {
   UseInterceptors,
   UploadedFile,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
+import { Roles, RolesGuard } from 'src/guards/role-guards.service';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('DEV', 'ADMIN')
 @Controller('/store')
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
@@ -48,12 +53,9 @@ export class StoreController {
     updateStoreDto: UpdateStoreDto,
     @UploadedFile() image_url: Express.Multer.File,
   ) {
-    const dto: UpdateStoreDto = {
+    return this.storeService.update({
       ...updateStoreDto,
       id: id,
-    };
-    return this.storeService.update({
-      ...dto,
       image_url: image_url,
     });
   }

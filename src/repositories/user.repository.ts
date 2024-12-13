@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { IUser } from 'src/interfaces/user.interface';
+import { CreateUserDto } from 'src/models/user/dto/create-user.dto';
+import { UpdateUserDto } from 'src/models/user/dto/update-user.dto';
 import { PrismaService } from 'src/provider/prisma/prisma-client';
-import { CreateUserDto } from 'src/services/user/dto/create-user.dto';
-import { UpdateUserDto } from 'src/services/user/dto/update-user.dto';
 import { rolesMap } from 'src/utils/rolesmap/rolesmap';
 
 @Injectable()

@@ -8,12 +8,17 @@ import {
   UseInterceptors,
   UploadedFile,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Roles, RolesGuard } from 'src/guards/role-guards.service';
+import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('DEV', 'ADMIN', 'USER')
 @Controller('/categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}

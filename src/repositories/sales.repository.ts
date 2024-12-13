@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { CreateSaleDto } from 'src/models/sales/dto/create-sale.dto';
 import { PrismaService } from 'src/provider/prisma/prisma-client';
-import { CreateSaleDto } from 'src/services/sales/dto/create-sale.dto';
 
 @Injectable()
 export class SalesRepository {
@@ -114,7 +114,7 @@ export class SalesRepository {
     });
   }
 
-  async findAllSalesByProductStore(storeId: string): Promise<any[]> {
+  async findAllSalesByProductStore(storeId: string) {
     const groupSalesByProductIdAndStoreId =
       await this.prismaService.sales.groupBy({
         where: { store_id: storeId },
