@@ -86,7 +86,6 @@ export class CategoryRepository {
       data: {
         name: dto.name,
         image_url: dto.image_url_string,
-        store_id: dto.store_id,
       },
     });
   }

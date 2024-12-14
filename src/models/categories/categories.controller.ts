@@ -55,12 +55,11 @@ export class CategoriesController {
     @Body() updateCategoryDto: UpdateCategoryDto,
     @UploadedFile() image_url: Express.Multer.File,
   ) {
-    const dto: UpdateCategoryDto = {
+    return this.categoriesService.update({
       ...updateCategoryDto,
       id: id,
       image_url: image_url,
-    };
-    return this.categoriesService.update(dto);
+    });
   }
 
   @Delete('/delete/:id')
