@@ -19,7 +19,7 @@ import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
 
 @Controller('/categories')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('DEV', 'ADMIN', 'USER')
+@Roles('Desenvolvedor', 'Gerente', 'SubGerente', 'Vendedor')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 

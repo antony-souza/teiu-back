@@ -18,7 +18,7 @@ import { JwtAuthGuard } from 'src/guards/jwt-guards.service';
 import { Roles, RolesGuard } from 'src/guards/role-guards.service';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('DEV', 'ADMIN')
+@Roles('Desenvolvedor', 'Gerente', 'SubGerente')
 @Controller('/store')
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}

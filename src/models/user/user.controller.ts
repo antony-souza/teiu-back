@@ -19,7 +19,7 @@ import { Roles, RolesGuard } from 'src/guards/role-guards.service';
 
 @Controller('/user')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('DEV', 'ADMIN')
+@Roles('Desenvolvedor', 'Gerente', 'SubGerente')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

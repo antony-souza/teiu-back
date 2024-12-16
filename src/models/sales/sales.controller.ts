@@ -10,13 +10,13 @@ import { Roles, RolesGuard } from 'src/guards/role-guards.service';
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
-  @Roles('DEV', 'ADMIN', 'USER')
+  @Roles('Desenvolvedor', 'Gerente', 'SubGerente', 'Vendedor')
   @Post('/create')
   create(@Body() createSaleDto: CreateSaleDto) {
     return this.salesService.createSales(createSaleDto);
   }
 
-  @Roles('DEV', 'ADMIN')
+  @Roles('Desenvolvedor', 'Gerente', 'SubGerente', 'Vendedor')
   @Get('/all/:id')
   findAllSalesForChart(@Param('id') id: string) {
     const dto: UpdateSaleDto = {
@@ -25,7 +25,7 @@ export class SalesController {
     return this.salesService.findAllSalesByProductStore(dto);
   }
 
-  @Roles('DEV', 'ADMIN', 'USER')
+  @Roles('Desenvolvedor', 'Gerente', 'SubGerente', 'Vendedor')
   @Get('/store/all/:id')
   findAllSales(@Param('id') id: string) {
     const dto: UpdateSaleDto = {
