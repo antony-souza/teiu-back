@@ -10,7 +10,7 @@ export class UserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async checkUserByEmail(email: string): Promise<number> {
-    const query = await this.prismaService.users.count({
+    const query = await this.prismaService.user.count({
       where: {
         email: email,
       },
@@ -20,7 +20,7 @@ export class UserRepository {
   }
 
   async checkUserByIdCount(id: string): Promise<number> {
-    const query = await this.prismaService.users.count({
+    const query = await this.prismaService.user.count({
       where: {
         id: id,
       },
@@ -30,7 +30,7 @@ export class UserRepository {
   }
 
   async checkUserById(id: string) {
-    const query = await this.prismaService.users.findUnique({
+    const query = await this.prismaService.user.findUnique({
       where: {
         id: id,
       },
@@ -47,7 +47,7 @@ export class UserRepository {
   }
 
   getUserByIdRole(id: string) {
-    return this.prismaService.users.findUnique({
+    return this.prismaService.user.findUnique({
       where: {
         id: id,
       },
@@ -58,7 +58,7 @@ export class UserRepository {
   }
 
   async getAllUsersEnableTrue(): Promise<IUser[]> {
-    return await this.prismaService.users.findMany({
+    return await this.prismaService.user.findMany({
       where: {
         enabled: true,
       },
@@ -73,7 +73,7 @@ export class UserRepository {
   }
 
   async getAllUsers() {
-    const response = await this.prismaService.users.findMany({
+    const response = await this.prismaService.user.findMany({
       select: {
         id: true,
         enabled: true,
@@ -99,7 +99,7 @@ export class UserRepository {
   }
 
   async getUserEnableByStore(id: string) {
-    const response = await this.prismaService.users.findMany({
+    const response = await this.prismaService.user.findMany({
       where: {
         store_id: id,
         enabled: true,
@@ -143,7 +143,7 @@ export class UserRepository {
   }
 
   async create(dto: CreateUserDto) {
-    const query = await this.prismaService.users.create({
+    const query = await this.prismaService.user.create({
       data: {
         name: dto.name,
         email: dto.email,
@@ -164,7 +164,7 @@ export class UserRepository {
   }
 
   async update(dto: UpdateUserDto) {
-    return await this.prismaService.users.update({
+    return await this.prismaService.user.update({
       where: {
         id: dto.id,
       },
@@ -186,7 +186,7 @@ export class UserRepository {
   }
 
   async deleteEnable(id: string): Promise<IUser> {
-    return await this.prismaService.users.update({
+    return await this.prismaService.user.update({
       where: {
         id: id,
       },
@@ -197,7 +197,7 @@ export class UserRepository {
   }
 
   async deletePermanent(id: string): Promise<IUser> {
-    return await this.prismaService.users.delete({
+    return await this.prismaService.user.delete({
       where: {
         id: id,
       },

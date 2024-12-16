@@ -1,10 +1,10 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { Users } from '@prisma/client';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
 import { AuthRepository } from 'src/repositories/auth.repository';
 import { rolesMap } from 'src/utils/rolesmap/rolesmap';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +42,7 @@ export class AuthService {
     return response;
   }
 
-  async validateToken(dto: CreateAuthDto): Promise<Users> {
+  async validateToken(dto: CreateAuthDto): Promise<User> {
     const payload = this.AuthToken.verifyToken(dto.token);
     const id: Partial<CreateAuthDto> = { id: payload.id };
     const user = await this.authRepository.findUnique(id);

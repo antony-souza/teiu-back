@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model User {
   id        String   @id @default(uuid())
   email     String   @unique
   name      String
@@ -31,7 +31,7 @@ model Store {
   enabled    Boolean      @default(true)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
-  User       Users[]      @relation("StoreUsers")
+  User       User[]      @relation("StoreUsers")
   Products   Products[]
   Categories Categories[]
   Sales      Sales[]
@@ -82,7 +82,7 @@ model Sales {
   date          String   @default("00/00/0000")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now())
-  User          Users    @relation(fields: [user_id], references: [id])
+  User          User    @relation(fields: [user_id], references: [id])
   Products      Products @relation(fields: [product_id], references: [id])
   Store         Store    @relation(fields: [store_id], references: [id])
 

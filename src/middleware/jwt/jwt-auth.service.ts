@@ -1,13 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Users } from '@prisma/client';
+import { User } from '@prisma/client';
 import { environment } from 'environment/environment';
 
 @Injectable()
 export class AuthJwtService {
   constructor(private jwtService: JwtService) {}
 
-  generateToken(user: Users): string {
+  generateToken(user: User): string {
     const payload = {
       id: user.id,
     };
@@ -17,7 +17,7 @@ export class AuthJwtService {
     });
   }
 
-  verifyToken(token: string): Users {
+  verifyToken(token: string): User {
     try {
       return this.jwtService.verify(token, { secret: environment.secreatKey });
     } catch {
