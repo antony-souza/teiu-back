@@ -18,7 +18,7 @@ export class StoreService {
   async create(dto: CreateStoreDto) {
     const existingStore = await this.storeRepository.checkStoreBy(dto.id);
 
-    if (!existingStore) {
+    if (existingStore) {
       throw new ConflictException('Store already exists');
     }
 
