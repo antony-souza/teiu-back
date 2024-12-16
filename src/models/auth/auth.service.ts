@@ -35,7 +35,7 @@ export class AuthService {
         name: user.name,
         image_url: user.image_url,
         store_id: user.store_id,
-        role: rolesMap[user.role] || 'Usuário',
+        role: rolesMap[user.role] || 'USER',
       },
     };
 
