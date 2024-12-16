@@ -4,7 +4,6 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { AuthJwtService } from 'src/middleware/jwt/jwt-auth.service';
 import { AuthRepository } from 'src/repositories/auth.repository';
 import { User } from '@prisma/client';
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -25,7 +24,7 @@ export class AuthService {
       throw new ConflictException('Password is incorrect');
     }
 
-    const token: string = this.AuthToken.generateToken(user);
+    const token: string = await this.AuthToken.generateToken(user);
 
     const response = {
       token: token,
