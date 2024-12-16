@@ -3,7 +3,6 @@ import { IUser } from 'src/interfaces/user.interface';
 import { CreateUserDto } from 'src/models/user/dto/create-user.dto';
 import { UpdateUserDto } from 'src/models/user/dto/update-user.dto';
 import { PrismaService } from 'src/provider/prisma/prisma-client';
-import { rolesMap } from 'src/utils/rolesmap/rolesmap';
 
 @Injectable()
 export class UserRepository {
@@ -92,7 +91,7 @@ export class UserRepository {
         name: previousResponse.name,
         email: previousResponse.email,
         image_url: previousResponse.image_url,
-        role: rolesMap[previousResponse.role],
+        role: previousResponse.role,
       };
     });
     return result;
@@ -134,7 +133,7 @@ export class UserRepository {
           name: previousResponse.name,
           email: previousResponse.email,
           image_url: previousResponse.image_url,
-          role: rolesMap[previousResponse.role],
+          role: previousResponse.role,
           store: checkStoreById.name,
         };
       }),
